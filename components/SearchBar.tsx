@@ -24,8 +24,10 @@ export default function SearchBar({ onLocationSelect, loading }: Props) {
         setShowDropdown(false);
       }
     }
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
+    // Use 'click' (not 'mousedown') so a click on a suggestion selects it
+    // before the outside-close fires — avoids a select-vs-close race.
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
   }, []);
 
   async function search(q: string) {
@@ -118,14 +120,14 @@ export default function SearchBar({ onLocationSelect, loading }: Props) {
     <div ref={wrapperRef} className="w-full max-w-2xl mx-auto relative">
       <form onSubmit={handleSubmit} className="flex gap-2.5">
         <div className="flex-1 relative">
-          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted text-base">🔍</span>
+          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-dim text-base">🔍</span>
           <input
             type="text"
             value={query}
             onChange={handleChange}
             onFocus={() => suggestions.length > 0 && setShowDropdown(true)}
             placeholder="Search any city, postcode, landmark or lat,lon…"
-            className="glass-strong w-full pl-11 pr-10 py-3.5 rounded-2xl text-[15px] placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/60 transition-shadow"
+            className="card-2 w-full pl-11 pr-10 py-3.5 text-[15px] text-white placeholder:text-dimmer focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition-shadow"
             disabled={loading}
           />
           {(searching || loading) && (
@@ -137,7 +139,7 @@ export default function SearchBar({ onLocationSelect, loading }: Props) {
         <button
           type="submit"
           disabled={!query.trim() || loading || searching}
-          className="px-6 py-3.5 rounded-2xl font-semibold text-sm text-white bg-[var(--accent)] hover:bg-[var(--accent-strong)] disabled:opacity-40 transition-all shadow-lg shadow-[var(--accent)]/25 active:scale-95"
+          className="btn-accent px-6 py-3.5 text-sm disabled:opacity-40"
         >
           Search
         </button>
@@ -146,10 +148,10 @@ export default function SearchBar({ onLocationSelect, loading }: Props) {
           onClick={handleGeolocate}
           disabled={geoLoading || loading}
           title="Use my current location"
-          className="glass-strong px-4 py-3.5 rounded-2xl text-base disabled:opacity-40 transition-all hover:ring-2 hover:ring-[var(--accent)]/40 active:scale-95"
+          className="btn-ghost px-4 py-3.5 text-base disabled:opacity-40"
         >
           {geoLoading ? (
-            <div className="w-4 h-4 border-2 border-[var(--muted)] border-t-transparent rounded-full animate-spin" />
+            <div className="w-4 h-4 border-2 border-[var(--text-dim)] border-t-transparent rounded-full animate-spin" />
           ) : (
             <span aria-hidden>📍</span>
           )}
@@ -158,24 +160,24 @@ export default function SearchBar({ onLocationSelect, loading }: Props) {
 
       {/* Dropdown */}
       {showDropdown && suggestions.length > 0 && (
-        <div className="glass-strong absolute top-full left-0 right-0 z-50 mt-2 rounded-2xl overflow-hidden animate-fade-in">
+        <div className="card-2 absolute top-full left-0 right-0 z-50 mt-2 overflow-hidden animate-fade-in border border-white/10">
           {suggestions.map((loc, i) => (
             <button
               key={i}
               onClick={() => handleSelect(loc)}
-              className="w-full text-left px-4 py-3 flex items-center gap-3 hover:bg-[var(--accent)]/10 transition-colors border-b hairline last:border-0"
+              className="w-full text-left px-4 py-3 flex items-center gap-3 hover:bg-[var(--accent)]/15 transition-colors border-b hairline last:border-0"
             >
               <span className="text-lg" aria-hidden>📌</span>
               <span className="min-w-0 flex-1">
                 <span className="font-medium text-[15px]">{loc.name}</span>
                 {(loc.admin1 || loc.country) && (
-                  <span className="ml-2 text-muted text-xs">
+                  <span className="ml-2 text-dim text-xs">
                     {[loc.admin1, loc.country].filter(Boolean).join(', ')}
                   </span>
                 )}
               </span>
               {loc.population ? (
-                <span className="text-muted text-[11px] shrink-0">{(loc.population / 1000).toFixed(0)}k people</span>
+                <span className="text-dimmer text-[11px] shrink-0">{(loc.population / 1000).toFixed(0)}k people</span>
               ) : null}
             </button>
           ))}
@@ -184,19 +186,19 @@ export default function SearchBar({ onLocationSelect, loading }: Props) {
 
       {/* Error */}
       {error && (
-        <p className="mt-2.5 text-sm text-red-500 dark:text-red-400 flex items-center justify-center gap-1.5">
+        <p className="mt-2.5 text-sm text-red-400 flex items-center justify-center gap-1.5">
           <span aria-hidden>⚠️</span> {error}
         </p>
       )}
 
       <div className="mt-3 flex flex-wrap items-center justify-center gap-2 text-xs">
-        <span className="text-muted">Try</span>
+        <span className="text-dim">Try</span>
         {['London', 'Tokyo', '48.8566, 2.3522', 'Eiffel Tower'].map((ex) => (
           <button
             key={ex}
             type="button"
             onClick={() => { setQuery(ex); search(ex); }}
-            className="glass px-2.5 py-1 rounded-full text-muted hover:text-[var(--foreground)] transition-colors"
+            className="px-2.5 py-1 rounded-full bg-[var(--surface-2)] text-dim hover:text-white transition-colors"
           >
             {ex}
           </button>

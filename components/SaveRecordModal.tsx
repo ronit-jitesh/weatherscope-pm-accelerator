@@ -44,68 +44,68 @@ export default function SaveRecordModal({ location, onSaved, onClose }: Props) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-fade-in" onClick={onClose}>
-      <div className="glass-strong rounded-3xl w-full max-w-md p-6 animate-fade-up" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-fade-in" onClick={onClose}>
+      <div className="card w-full max-w-md p-6 animate-fade-up border border-white/10" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center gap-3 mb-1">
-          <span className="grid h-10 w-10 place-items-center rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 text-white text-lg shadow-lg shadow-indigo-500/20" aria-hidden>🗃️</span>
+          <span className="grid h-10 w-10 place-items-center rounded-2xl text-lg" style={{ background: 'var(--accent)' }} aria-hidden>🗃️</span>
           <h3 className="text-lg font-semibold">Save to your history</h3>
         </div>
-        <p className="text-sm text-muted mb-5">
-          We&apos;ll pull temperature data for <strong className="text-[var(--foreground)]">{location.name}</strong> across your chosen dates and store it.
+        <p className="text-sm text-dim mb-5">
+          We&apos;ll pull temperature data for <strong className="text-white">{location.name}</strong> across your chosen dates and store it.
         </p>
 
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-muted mb-1.5">Start date</label>
+              <label className="block text-xs font-medium text-dim mb-1.5">Start date</label>
               <input
                 type="date"
                 value={startDate}
                 min="1940-01-01"
                 max={endDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="glass w-full px-3 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/60"
+                className="card-2 w-full px-3 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[var(--accent)] [color-scheme:dark]"
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-muted mb-1.5">End date</label>
+              <label className="block text-xs font-medium text-dim mb-1.5">End date</label>
               <input
                 type="date"
                 value={endDate}
                 min={startDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="glass w-full px-3 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/60"
+                className="card-2 w-full px-3 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[var(--accent)] [color-scheme:dark]"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-muted mb-1.5">Notes <span className="opacity-60">(optional)</span></label>
+            <label className="block text-xs font-medium text-dim mb-1.5">Notes <span className="opacity-60">(optional)</span></label>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="e.g. Paris trip · checking weather before the conference…"
               rows={2}
               maxLength={500}
-              className="glass w-full px-3 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/60 resize-none"
+              className="card-2 w-full px-3 py-2.5 text-sm text-white placeholder:text-dimmer focus:outline-none focus:ring-2 focus:ring-[var(--accent)] resize-none"
             />
           </div>
 
           {error && (
-            <p className="text-sm text-red-500 flex items-center gap-1.5"><span aria-hidden>⚠️</span> {error}</p>
+            <p className="text-sm text-red-400 flex items-center gap-1.5"><span aria-hidden>⚠️</span> {error}</p>
           )}
 
           <div className="flex gap-3 pt-1">
             <button
               onClick={onClose}
-              className="glass flex-1 px-4 py-2.5 rounded-xl text-sm font-medium transition-all hover:ring-2 hover:ring-[var(--muted)]/30 active:scale-95"
+              className="btn-ghost flex-1 px-4 py-2.5 text-sm font-medium"
             >
               Cancel
             </button>
             <button
               onClick={handleSave}
               disabled={loading}
-              className="flex-1 px-4 py-2.5 bg-[var(--accent)] hover:bg-[var(--accent-strong)] disabled:opacity-50 text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-[var(--accent)]/25 active:scale-95"
+              className="btn-accent flex-1 px-4 py-2.5 text-sm disabled:opacity-50"
             >
               {loading ? 'Fetching & saving…' : 'Save record'}
             </button>

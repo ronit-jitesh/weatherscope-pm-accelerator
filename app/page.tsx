@@ -10,13 +10,9 @@ import PackingAdvisory from '@/components/PackingAdvisory';
 import AirQualityCard from '@/components/AirQualityCard';
 import SaveRecordModal from '@/components/SaveRecordModal';
 import AboutPMA from '@/components/AboutPMA';
-import { getSkyTheme } from '@/lib/weather-theme';
 import type { GeocodedLocation, WeatherData, AirQualityData } from '@/types/weather';
 
 type State = 'idle' | 'loading' | 'success' | 'error';
-
-const DEFAULT_GRADIENT = 'linear-gradient(180deg, #4f9bf5 0%, #9cc6f7 42%, #e9f1fc 100%)';
-const DEFAULT_GLOW = 'radial-gradient(720px 380px at 84% 6%, rgba(255, 221, 120, 0.45), transparent 70%)';
 
 export default function HomePage() {
   const [state, setState] = useState<State>('idle');
@@ -26,8 +22,6 @@ export default function HomePage() {
   const [selectedLocation, setSelectedLocation] = useState<GeocodedLocation | null>(null);
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [savedBanner, setSavedBanner] = useState(false);
-
-  const theme = weather ? getSkyTheme(weather.current.weatherCode, weather.current.isDay) : null;
 
   async function handleLocationSelect(location: GeocodedLocation) {
     setSelectedLocation(location);
@@ -75,43 +69,36 @@ export default function HomePage() {
   }
 
   return (
-    <div className="relative min-h-screen">
-      {/* Dynamic atmospheric backdrop */}
-      <div className="sky-backdrop" style={{ background: theme?.pageGradient ?? DEFAULT_GRADIENT }} />
-      <div className="sky-glow" style={{ background: theme?.glow ?? DEFAULT_GLOW }} />
-
+    <div className="relative min-h-screen grain ambient-glow">
       {/* Header */}
       <header className="sticky top-0 z-40">
-        <div className="glass border-b hairline">
+        <div className="bg-black/80 backdrop-blur-md border-b hairline">
           <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2.5">
-              <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-sky-500 to-indigo-600 text-white text-lg shadow-lg shadow-indigo-500/20">⛅</span>
+              <span className="grid h-9 w-9 place-items-center rounded-xl text-black text-lg font-bold" style={{ background: 'var(--accent)' }}>⛅</span>
               <span className="flex flex-col leading-none">
-                <span className="font-semibold tracking-tight">WeatherScope</span>
-                <span className="text-[11px] text-muted mt-0.5">by Ronit Jitesh</span>
+                <span className="font-bold tracking-tight">WeatherScope</span>
+                <span className="text-[11px] text-dim mt-0.5">by Ronit Jitesh</span>
               </span>
             </Link>
-            <Link
-              href="/history"
-              className="glass-strong inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-medium transition-all hover:ring-2 hover:ring-[var(--accent)]/40 active:scale-95"
-            >
+            <Link href="/history" className="btn-ghost inline-flex items-center gap-2 px-3.5 py-2 text-sm font-medium">
               🗃️ <span className="hidden sm:inline">History &amp; export</span>
             </Link>
           </div>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 py-10 sm:py-14 space-y-8">
+      <main className="relative z-10 max-w-6xl mx-auto px-4 py-10 sm:py-14 space-y-7">
         {/* Hero search */}
         <div className="text-center space-y-5 animate-fade-up">
-          <div className="inline-flex items-center gap-2 glass rounded-full px-3.5 py-1.5 text-xs font-medium text-muted">
-            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+          <div className="inline-flex items-center gap-2 pill">
+            <span className="h-2 w-2 rounded-full" style={{ background: 'var(--accent)' }} />
             Live data · no API key required
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
-            Weather, beautifully clear
+          <h1 className="text-4xl sm:text-6xl font-bold tracking-tight leading-[1.05]">
+            Make weather data<br /><span style={{ color: 'var(--accent)' }}>work for you</span>
           </h1>
-          <p className="text-muted text-base sm:text-lg max-w-xl mx-auto">
+          <p className="text-dim text-base sm:text-lg max-w-xl mx-auto">
             Live conditions, a seven-day outlook, air quality, and a smart packing brief —
             for any city, postcode, landmark, or coordinate on Earth.
           </p>
@@ -120,37 +107,34 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Loading skeleton */}
+        {/* Loading */}
         {state === 'loading' && (
           <div className="space-y-4">
-            <div className="h-72 rounded-[28px] skeleton" />
-            <div className="h-28 rounded-3xl skeleton" />
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
-              {Array.from({ length: 7 }).map((_, i) => <div key={i} className="h-44 rounded-3xl skeleton" />)}
-            </div>
+            <div className="h-80 rounded-[28px] skeleton" />
+            <div className="h-28 rounded-[28px] skeleton" />
           </div>
         )}
 
-        {/* Error state */}
+        {/* Error */}
         {state === 'error' && (
-          <div className="glass rounded-3xl p-8 text-center max-w-lg mx-auto animate-fade-up">
+          <div className="card p-8 text-center max-w-lg mx-auto animate-fade-up">
             <div className="text-5xl mb-3">🌧️</div>
             <p className="text-lg font-semibold mb-1">That didn’t work</p>
-            <p className="text-sm text-muted mb-4">{weatherError}</p>
-            <p className="text-xs text-muted">
-              Double-check the spelling, or try coordinates like <code className="font-mono">48.8566, 2.3522</code>.
+            <p className="text-sm text-dim mb-4">{weatherError}</p>
+            <p className="text-xs text-dimmer">
+              Double-check the spelling, or try coordinates like <code className="font-mono" style={{ color: 'var(--accent)' }}>48.8566, 2.3522</code>.
             </p>
           </div>
         )}
 
         {/* Success */}
         {state === 'success' && weather && (
-          <div className="space-y-8">
+          <div className="space-y-7">
             {savedBanner && (
-              <div className="glass rounded-2xl px-4 py-3 flex items-center gap-2 text-sm animate-fade-up">
-                <span className="text-emerald-500">✅</span>
+              <div className="card px-4 py-3 flex items-center gap-2 text-sm animate-fade-up">
+                <span style={{ color: 'var(--accent)' }}>✅</span>
                 <span>Saved to your history.</span>
-                <Link href="/history" className="font-medium text-[var(--accent)] underline">View records →</Link>
+                <Link href="/history" className="font-medium underline" style={{ color: 'var(--accent)' }}>View records →</Link>
               </div>
             )}
 
@@ -167,24 +151,21 @@ export default function HomePage() {
               {aqi ? (
                 <AirQualityCard data={aqi} />
               ) : (
-                <div className="glass rounded-3xl grid place-items-center min-h-[200px] text-sm text-muted">
+                <div className="card grid place-items-center min-h-[200px] text-sm text-dim">
                   Air-quality data isn’t available here
                 </div>
               )}
             </div>
 
             {/* Save CTA */}
-            <div className="glass rounded-3xl p-5 sm:p-6 flex items-center justify-between flex-wrap gap-4">
+            <div className="card p-5 sm:p-6 flex items-center justify-between flex-wrap gap-4">
               <div>
                 <p className="font-semibold">Heading here later? Save it.</p>
-                <p className="text-sm text-muted mt-0.5">
+                <p className="text-sm text-dim mt-0.5">
                   Pick a date range to archive temperature data and revisit it anytime.
                 </p>
               </div>
-              <button
-                onClick={() => setShowSaveModal(true)}
-                className="px-5 py-2.5 bg-[var(--accent)] hover:bg-[var(--accent-strong)] text-white rounded-xl font-semibold text-sm transition-all shadow-lg shadow-[var(--accent)]/25 active:scale-95"
-              >
+              <button onClick={() => setShowSaveModal(true)} className="btn-accent px-5 py-2.5 text-sm">
                 🗃️ Save this location
               </button>
             </div>
@@ -196,7 +177,7 @@ export default function HomePage() {
           <div className="text-center py-12 animate-fade-up" style={{ animationDelay: '0.1s' }}>
             <div className="text-7xl mb-4 float-icon inline-block">🌍</div>
             <p className="text-lg font-medium">Search a place to begin</p>
-            <p className="text-sm text-muted mt-1">The sky above adapts to whatever you find.</p>
+            <p className="text-sm text-dim mt-1">Real conditions, real data — for anywhere on the map.</p>
           </div>
         )}
 

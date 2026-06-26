@@ -27,7 +27,7 @@ export default function ExportButtons({ recordId, compact }: Props) {
           key={key}
           onClick={() => handleExport(key)}
           title={`Export as ${label}`}
-          className={`glass-strong flex items-center gap-1.5 rounded-lg font-medium transition-all hover:ring-2 hover:ring-[var(--accent)]/40 active:scale-95 ${
+          className={`flex items-center gap-1.5 rounded-lg font-medium bg-[var(--surface-2)] text-white transition-all hover:bg-[#333] active:scale-95 ${
             compact ? 'px-2 py-1 text-[11px]' : 'px-3 py-2 text-xs'
           }`}
         >
