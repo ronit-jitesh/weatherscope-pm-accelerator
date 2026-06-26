@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import type { WeatherRecord } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { resolveLocation } from '@/lib/geocode';
 import { fetchHistoricalWeather } from '@/lib/weather';
@@ -16,7 +17,7 @@ export async function GET() {
     orderBy: { createdAt: 'desc' },
   });
 
-  const parsed = records.map((r) => ({
+  const parsed = records.map((r: WeatherRecord) => ({
     ...r,
     startDate: r.startDate.toISOString().split('T')[0],
     endDate: r.endDate.toISOString().split('T')[0],
