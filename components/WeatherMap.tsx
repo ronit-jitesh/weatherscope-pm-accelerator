@@ -5,8 +5,8 @@ import dynamic from 'next/dynamic';
 const MapInner = dynamic(() => import('./MapInner'), {
   ssr: false,
   loading: () => (
-    <div className="h-full w-full flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-xl">
-      <div className="text-center text-gray-400">
+    <div className="h-full w-full grid place-items-center skeleton rounded-3xl">
+      <div className="text-center text-muted">
         <div className="text-2xl mb-1">🗺️</div>
         <p className="text-sm">Loading map…</p>
       </div>
@@ -22,14 +22,17 @@ interface Props {
 
 export default function WeatherMap({ latitude, longitude, locationName }: Props) {
   return (
-    <div>
-      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">Location Map</h3>
-      <div className="h-64 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm">
+    <section className="glass rounded-3xl p-5 sm:p-6 flex flex-col">
+      <div className="mb-3 flex items-baseline justify-between">
+        <h3 className="text-lg font-semibold">On the map</h3>
+        <span className="text-xs text-muted">{latitude.toFixed(3)}, {longitude.toFixed(3)}</span>
+      </div>
+      <div className="flex-1 min-h-[260px] rounded-2xl overflow-hidden ring-1 ring-[var(--border-glass)]/20">
         <MapInner latitude={latitude} longitude={longitude} locationName={locationName} />
       </div>
-      <p className="text-xs text-gray-400 mt-1 text-right">
-        Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer" className="underline">OpenStreetMap</a> contributors
+      <p className="mt-2 text-[11px] text-muted text-right">
+        © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer" className="underline hover:text-[var(--foreground)]">OpenStreetMap</a> contributors
       </p>
-    </div>
+    </section>
   );
 }

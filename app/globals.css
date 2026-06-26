@@ -1,31 +1,198 @@
 @import "tailwindcss";
 
+/* ───────────────────────── Design tokens ───────────────────────── */
 :root {
-  --background: #f9fafb;
-  --foreground: #111827;
+  --background: #eaf1fb;
+  --foreground: #0b1220;
+
+  --surface: 255 255 255;          /* glass base (rgb channels) */
+  --surface-strong: 255 255 255;
+  --border-glass: 255 255 255;
+
+  --muted: #5b6b85;
+  --accent: #2563eb;
+  --accent-strong: #1d4ed8;
+
+  --shadow-soft: 0 10px 40px -12px rgba(15, 30, 60, 0.25);
+  --shadow-card: 0 8px 30px -10px rgba(15, 30, 60, 0.18);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #060912;
+    --foreground: #eef3fb;
+
+    --surface: 22 30 48;
+    --surface-strong: 30 41 64;
+    --border-glass: 255 255 255;
+
+    --muted: #93a2bd;
+    --accent: #60a5fa;
+    --accent-strong: #3b82f6;
+
+    --shadow-soft: 0 18px 50px -12px rgba(0, 0, 0, 0.6);
+    --shadow-card: 0 12px 36px -12px rgba(0, 0, 0, 0.5);
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #030712;
-    --foreground: #f9fafb;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background: var(--background);
+  min-height: 100vh;
 }
 
-/* Leaflet CSS z-index fix for Next.js */
+/* ───────────────────────── Atmospheric backdrop ───────────────────────── */
+/* The animated sky lives behind everything and crossfades by weather. */
+.sky-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  transition: background 1200ms ease;
+  background:
+    radial-gradient(1200px 600px at 15% -10%, rgba(255, 255, 255, 0.18), transparent 60%),
+    var(--sky-gradient, linear-gradient(180deg, #bfdbfe 0%, #e7eefb 55%, var(--background) 100%));
+}
+.sky-glow {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(700px 360px at 85% 8%, var(--sky-accent-glow, rgba(255, 224, 130, 0.35)), transparent 70%);
+  transition: background 1200ms ease;
+}
+
+/* ───────────────────────── Glass surfaces ───────────────────────── */
+.glass {
+  background: rgb(var(--surface) / 0.62);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid rgb(var(--border-glass) / 0.35);
+  box-shadow: var(--shadow-card);
+}
+@media (prefers-color-scheme: dark) {
+  .glass {
+    border-color: rgb(var(--border-glass) / 0.08);
+  }
+}
+
+.glass-strong {
+  background: rgb(var(--surface-strong) / 0.82);
+  backdrop-filter: blur(28px) saturate(150%);
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  border: 1px solid rgb(var(--border-glass) / 0.45);
+  box-shadow: var(--shadow-soft);
+}
+@media (prefers-color-scheme: dark) {
+  .glass-strong {
+    border-color: rgb(var(--border-glass) / 0.1);
+  }
+}
+
+.hairline {
+  border-color: rgb(var(--border-glass) / 0.18);
+}
+
+.text-muted {
+  color: var(--muted);
+}
+
+/* ───────────────────────── Animations ───────────────────────── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+@keyframes shimmer {
+  0%   { background-position: -480px 0; }
+  100% { background-position: 480px 0; }
+}
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
+
+.animate-fade-up {
+  opacity: 0;
+  animation: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.animate-fade-in {
+  animation: fade-in 0.6s ease forwards;
+}
+.float-icon {
+  animation: float 5s ease-in-out infinite;
+  filter: drop-shadow(0 14px 24px rgba(0, 0, 0, 0.22));
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgb(var(--surface) / 0.4) 25%,
+    rgb(var(--surface) / 0.7) 37%,
+    rgb(var(--surface) / 0.4) 63%
+  );
+  background-size: 960px 100%;
+  animation: shimmer 1.6s infinite linear;
+}
+
+/* Stagger helpers */
+.stagger > * { opacity: 0; animation: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+.stagger > *:nth-child(1) { animation-delay: 0.04s; }
+.stagger > *:nth-child(2) { animation-delay: 0.10s; }
+.stagger > *:nth-child(3) { animation-delay: 0.16s; }
+.stagger > *:nth-child(4) { animation-delay: 0.22s; }
+.stagger > *:nth-child(5) { animation-delay: 0.28s; }
+.stagger > *:nth-child(6) { animation-delay: 0.34s; }
+.stagger > *:nth-child(7) { animation-delay: 0.40s; }
+
+.lift {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+}
+.lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-soft);
+}
+
+/* ───────────────────────── Scrollbar ───────────────────────── */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--surface-strong) / 0.6);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--muted); background-clip: content-box; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ───────────────────────── Leaflet fixes ───────────────────────── */
 .leaflet-pane,
 .leaflet-tile,
 .leaflet-marker-icon,
@@ -40,3 +207,4 @@ body {
   left: 0;
   top: 0;
 }
+.leaflet-container { font-family: inherit; background: transparent; }

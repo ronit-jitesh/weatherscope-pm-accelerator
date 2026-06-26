@@ -1,7 +1,7 @@
 'use client';
 
 const FORMATS = [
-  { key: 'json', label: 'JSON', icon: '{}' },
+  { key: 'json', label: 'JSON', icon: '{ }' },
   { key: 'csv', label: 'CSV', icon: '📊' },
   { key: 'xml', label: 'XML', icon: '🗂️' },
   { key: 'markdown', label: 'Markdown', icon: '📝' },
@@ -10,9 +10,10 @@ const FORMATS = [
 
 interface Props {
   recordId?: string;
+  compact?: boolean;
 }
 
-export default function ExportButtons({ recordId }: Props) {
+export default function ExportButtons({ recordId, compact }: Props) {
   function handleExport(format: string) {
     const params = new URLSearchParams({ format });
     if (recordId) params.set('id', recordId);
@@ -20,14 +21,17 @@ export default function ExportButtons({ recordId }: Props) {
   }
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-1.5">
       {FORMATS.map(({ key, label, icon }) => (
         <button
           key={key}
           onClick={() => handleExport(key)}
-          className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors shadow-sm"
+          title={`Export as ${label}`}
+          className={`glass-strong flex items-center gap-1.5 rounded-lg font-medium transition-all hover:ring-2 hover:ring-[var(--accent)]/40 active:scale-95 ${
+            compact ? 'px-2 py-1 text-[11px]' : 'px-3 py-2 text-xs'
+          }`}
         >
-          <span>{icon}</span>
+          <span aria-hidden>{icon}</span>
           <span>{label}</span>
         </button>
       ))}

@@ -11,47 +11,62 @@ interface Props {
 export default function ForecastGrid({ daily, timezone }: Props) {
   const days = daily.slice(0, 7);
 
+  // Shared scale so the temp bars are comparable across the week.
+  const allMax = Math.max(...days.map((d) => d.tempMax));
+  const allMin = Math.min(...days.map((d) => d.tempMin));
+  const span = Math.max(allMax - allMin, 1);
+
   return (
-    <div>
-      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3">7-Day Forecast</h3>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3">
+    <section className="animate-fade-up" style={{ animationDelay: '0.05s' }}>
+      <div className="mb-3 flex items-baseline justify-between">
+        <h3 className="text-lg font-semibold">The week ahead</h3>
+        <span className="text-xs text-muted">7-day outlook</span>
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 stagger">
         {days.map((day, i) => {
           const wmo = getWmoInfo(day.weatherCode);
           const date = new Date(day.date + 'T12:00:00Z');
-          const label = i === 0
-            ? 'Today'
-            : date.toLocaleDateString('en-US', { weekday: 'short', timeZone: timezone });
+          const label = i === 0 ? 'Today' : date.toLocaleDateString('en-US', { weekday: 'short', timeZone: timezone });
           const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: timezone });
+
+          const lo = ((day.tempMin - allMin) / span) * 100;
+          const hi = ((day.tempMax - allMin) / span) * 100;
 
           return (
             <div
               key={day.date}
-              className={`flex flex-col items-center p-3 rounded-xl border transition-colors ${
-                i === 0
-                  ? 'bg-sky-50 dark:bg-sky-900/30 border-sky-200 dark:border-sky-700'
-                  : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750'
+              className={`group rounded-3xl p-4 flex flex-col items-center text-center lift ${
+                i === 0 ? 'glass-strong ring-1 ring-[var(--accent)]/30' : 'glass'
               }`}
             >
-              <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">{label}</p>
-              <p className="text-xs text-gray-400 dark:text-gray-500">{dateStr}</p>
-              <div className="text-3xl my-2">{wmo.emoji}</div>
-              <p className="text-xs text-gray-500 dark:text-gray-400 text-center leading-tight">{wmo.description}</p>
-              <div className="mt-2 flex gap-2 text-sm font-medium">
-                <span className="text-gray-800 dark:text-gray-200">{Math.round(day.tempMax)}°</span>
-                <span className="text-gray-400">{Math.round(day.tempMin)}°</span>
+              <p className="text-sm font-semibold">{label}</p>
+              <p className="text-[11px] text-muted">{dateStr}</p>
+
+              <div className="my-2 text-4xl transition-transform duration-300 group-hover:scale-110 select-none" aria-hidden>
+                {wmo.emoji}
               </div>
-              <div className="mt-1.5 flex flex-col items-center gap-0.5 text-xs text-gray-400 dark:text-gray-500">
-                {day.precipitationProbabilityMax > 0 && (
-                  <span>🌧 {day.precipitationProbabilityMax}%</span>
-                )}
-                {day.uvIndexMax >= 3 && (
-                  <span>☀️ UV {day.uvIndexMax}</span>
-                )}
+              <p className="text-[11px] text-muted leading-tight min-h-[28px] flex items-center">{wmo.description}</p>
+
+              <div className="mt-2 flex w-full items-center gap-2 text-xs font-medium">
+                <span className="text-muted w-6 text-right">{Math.round(day.tempMin)}°</span>
+                <span className="relative h-1.5 flex-1 rounded-full bg-[var(--muted)]/20">
+                  <span
+                    className="absolute h-full rounded-full bg-gradient-to-r from-sky-400 to-amber-400"
+                    style={{ left: `${lo}%`, right: `${100 - hi}%` }}
+                  />
+                </span>
+                <span className="w-6 text-left">{Math.round(day.tempMax)}°</span>
+              </div>
+
+              <div className="mt-2.5 flex items-center gap-3 text-[11px] text-muted">
+                <span title="Chance of rain">💧 {day.precipitationProbabilityMax}%</span>
+                {day.uvIndexMax >= 3 && <span title="Max UV index">☀️ {Math.round(day.uvIndexMax)}</span>}
               </div>
             </div>
           );
         })}
       </div>
-    </div>
+    </section>
   );
 }

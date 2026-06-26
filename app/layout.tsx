@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
@@ -13,8 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "WeatherScope — Real-time Weather Intelligence",
-  description: "Full-stack weather app with 7-day forecast, air quality, packing advisory, and weather history. Built by Ronit Jitesh for PM Accelerator.",
+  title: "WeatherScope — Weather, beautifully clear",
+  description:
+    "Live conditions, a 7-day outlook, air quality, and a smart packing brief for anywhere on Earth. Built by Ronit Jitesh for the PM Accelerator AI Engineer assessment.",
 };
 
 export default function RootLayout({
@@ -25,7 +27,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
