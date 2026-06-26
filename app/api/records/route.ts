@@ -95,12 +95,8 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (err) {
-    const e = err as { name?: string; code?: string; message?: string };
-    console.error('DB write failed:', e);
-    return NextResponse.json(
-      { error: 'Could not save the record to the database.', debug: { name: e.name, code: e.code, message: e.message?.slice(0, 300) } },
-      { status: 500 },
-    );
+    console.error('DB write failed:', err);
+    return NextResponse.json({ error: 'Could not save the record to the database. Please try again.' }, { status: 500 });
   }
 
   return NextResponse.json({
