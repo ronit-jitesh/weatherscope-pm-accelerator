@@ -1,0 +1,22 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model WeatherRecord {
+  id              String   @id @default(cuid())
+  locationQuery   String
+  resolvedName    String
+  latitude        Float
+  longitude       Float
+  startDate       DateTime
+  endDate         DateTime
+  temperatureData String
+  rawApiData      String?
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
