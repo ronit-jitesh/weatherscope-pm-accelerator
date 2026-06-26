@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import ExportButtons from './ExportButtons';
 import type { WeatherRecordRow } from '@/types/weather';
 import { getWmoInfo } from '@/lib/wmo-codes';
+import { apiFetch, errorMessage } from '@/lib/client';
 
 export default function HistoryTable() {
   const [records, setRecords] = useState<WeatherRecordRow[]>([]);
@@ -50,17 +51,15 @@ export default function HistoryTable() {
     setEditLoading(true);
     setEditError('');
     try {
-      const res = await fetch(`/api/records/${editId}`, {
+      await apiFetch(`/api/records/${editId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ notes: editNotes, startDate: editStart, endDate: editEnd, locationQuery: editLocation }),
       });
-      const data = await res.json();
-      if (!res.ok) { setEditError(data.error || 'Update failed'); return; }
       setEditId(null);
       fetchRecords();
-    } catch {
-      setEditError('Network error');
+    } catch (err) {
+      setEditError(errorMessage(err));
     } finally {
       setEditLoading(false);
     }

@@ -3,6 +3,9 @@
 import Link from 'next/link';
 import HistoryTable from '@/components/HistoryTable';
 import { useState } from 'react';
+import { apiFetch, errorMessage } from '@/lib/client';
+
+interface CreatedRecord { record: { resolvedName: string } }
 
 export default function HistoryPage() {
   const [showAddForm, setShowAddForm] = useState(false);
@@ -24,19 +27,17 @@ export default function HistoryPage() {
     }
     setFormLoading(true);
     try {
-      const res = await fetch('/api/records', {
+      const data = await apiFetch<CreatedRecord>('/api/records', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
-      const data = await res.json();
-      if (!res.ok) { setFormError(data.error || 'Failed to create record'); return; }
       setFormSuccess(`✅ Record created for ${data.record.resolvedName}`);
       setFormData({ locationQuery: '', startDate: '', endDate: '', notes: '' });
       setShowAddForm(false);
       setRefreshKey((k) => k + 1);
-    } catch {
-      setFormError('Network error — please try again');
+    } catch (err) {
+      setFormError(errorMessage(err));
     } finally {
       setFormLoading(false);
     }

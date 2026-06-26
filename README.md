@@ -52,11 +52,11 @@ All derived from the same Open-Meteo API call — zero extra cost, high perceive
 |---|---|---|
 | Framework | Next.js 16 (App Router, TypeScript) | Full-stack in one project; Server Actions and API routes |
 | Styling | Tailwind CSS | Utility-first, responsive by default |
-| Database | SQLite via `@libsql/client` | Zero infrastructure for the demo; swap for Postgres with one line |
-| ORM | Prisma v7 | Type-safe queries, painless migrations, Studio viewer |
+| Database | Supabase Postgres via `@prisma/adapter-pg` | Hosted Postgres; persists on serverless/Vercel (unlike a local SQLite file) |
+| ORM | Prisma v7 | Type-safe queries, migrations, Studio viewer |
 | Weather API | Open-Meteo | No API key, no credit card; forecast + ERA5 archive back to 1940 |
 | Geocoding | Open-Meteo Geocoding + Nominatim | City/postal/coord support; Nominatim for landmarks |
-| Map | React-Leaflet + OpenStreetMap | No billing account; MIT licensed; interactive pan/zoom |
+| Map | React-Leaflet + OpenStreetMap (dark CARTO tiles) | No billing account; MIT licensed; interactive pan/zoom |
 | Validation | Zod | Schema-first validation on both API input and CRUD forms |
 | Export | papaparse (CSV) + xmlbuilder2 (XML) + pdfkit (PDF) | Lightest reliable option per format |
 
@@ -86,7 +86,8 @@ Google Maps JavaScript API requires a billing account. Leaflet + OpenStreetMap i
 git clone <repo-url>
 cd weather
 npm install
-npx prisma migrate dev --name init
+cp .env.example .env          # then paste your Supabase Postgres URL into .env
+npx prisma migrate deploy     # applies prisma/migrations to your database
 npm run dev
 ```
 
@@ -94,18 +95,20 @@ Open [http://localhost:3000](http://localhost:3000)
 
 ### Environment Variables
 
-No API keys are required. The `.env` file only configures the local SQLite database path:
+No weather/map API keys are required. The only required variable is the database
+connection string:
 
 ```
-DATABASE_URL="file:./prisma/dev.db"
+DATABASE_URL="postgresql://postgres.<ref>:<password>@aws-0-<region>.pooler.supabase.com:6543/postgres"
 ```
 
-### Switching to Postgres/Supabase
+Use the Supabase **transaction pooler** string (port `6543`) — it's the connection
+mode recommended for serverless/Vercel. On Vercel, set `DATABASE_URL` in
+Project → Settings → Environment Variables.
 
-1. Update `prisma/schema.prisma` datasource provider to `postgresql`
-2. Update `prisma.config.ts` with your Supabase connection string
-3. Update `lib/prisma.ts` to use `@prisma/adapter-pg` or `@prisma/adapter-neon`
-4. Run `npx prisma migrate dev`
+The app talks to Postgres through Prisma's `@prisma/adapter-pg` driver adapter
+(`lib/prisma.ts`), so it runs cleanly on serverless where a local SQLite file can't
+be written.
 
 ---
 
@@ -159,8 +162,10 @@ lib/
 types/
   weather.ts              — Shared TypeScript types
 prisma/
-  schema.prisma           — WeatherRecord model
-  dev.db                  — SQLite database (auto-created on migrate)
+  schema.prisma           — WeatherRecord model (Postgres)
+  migrations/             — SQL migrations (applied to Supabase Postgres)
+lib/
+  client.ts               — fetch wrapper: server-error vs network-error
 ```
 
 ---

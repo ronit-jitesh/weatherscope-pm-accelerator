@@ -1,10 +1,12 @@
 import { PrismaClient } from '@prisma/client';
-import { PrismaLibSql } from '@prisma/adapter-libsql';
-import path from 'path';
+import { PrismaPg } from '@prisma/adapter-pg';
 
 function createPrismaClient() {
-  const dbPath = path.resolve(process.cwd(), 'prisma/dev.db');
-  const adapter = new PrismaLibSql({ url: `file:${dbPath}` });
+  const connectionString = process.env.DATABASE_URL;
+  if (!connectionString) {
+    throw new Error('DATABASE_URL is not set. Add your Supabase Postgres connection string.');
+  }
+  const adapter = new PrismaPg({ connectionString });
   return new PrismaClient({ adapter });
 }
 

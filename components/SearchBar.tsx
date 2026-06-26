@@ -15,8 +15,10 @@ export default function SearchBar({ onLocationSelect, loading }: Props) {
   const [geoLoading, setGeoLoading] = useState(false);
   const [error, setError] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const listboxId = 'location-suggestions';
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -44,6 +46,7 @@ export default function SearchBar({ onLocationSelect, loading }: Props) {
       } else {
         setSuggestions(data.results);
         setShowDropdown(true);
+        setActiveIndex(-1);
         setError('');
       }
     } catch {
@@ -68,7 +71,27 @@ export default function SearchBar({ onLocationSelect, loading }: Props) {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (debounceRef.current) clearTimeout(debounceRef.current);
+    // If the dropdown has results, Enter commits the highlighted one
+    // (or the top result), so keyboard users can complete a search.
+    if (showDropdown && suggestions.length > 0) {
+      handleSelect(suggestions[activeIndex >= 0 ? activeIndex : 0]);
+      return;
+    }
     search(query);
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (!showDropdown || suggestions.length === 0) return;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setActiveIndex((i) => (i + 1) % suggestions.length);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setActiveIndex((i) => (i <= 0 ? suggestions.length - 1 : i - 1));
+    } else if (e.key === 'Escape') {
+      setShowDropdown(false);
+      setActiveIndex(-1);
+    }
   }
 
   function handleSelect(loc: GeocodedLocation) {
@@ -125,10 +148,17 @@ export default function SearchBar({ onLocationSelect, loading }: Props) {
             type="text"
             value={query}
             onChange={handleChange}
+            onKeyDown={handleKeyDown}
             onFocus={() => suggestions.length > 0 && setShowDropdown(true)}
             placeholder="Search any city, postcode, landmark or lat,lon…"
             className="card-2 w-full pl-11 pr-10 py-3.5 text-[15px] text-white placeholder:text-dimmer focus:outline-none focus:ring-2 focus:ring-[var(--accent)] transition-shadow"
             disabled={loading}
+            role="combobox"
+            aria-expanded={showDropdown && suggestions.length > 0}
+            aria-controls={listboxId}
+            aria-autocomplete="list"
+            aria-activedescendant={activeIndex >= 0 ? `${listboxId}-${activeIndex}` : undefined}
+            aria-label="Search for a location"
           />
           {(searching || loading) && (
             <div className="absolute right-3.5 top-1/2 -translate-y-1/2">
@@ -160,12 +190,19 @@ export default function SearchBar({ onLocationSelect, loading }: Props) {
 
       {/* Dropdown */}
       {showDropdown && suggestions.length > 0 && (
-        <div className="card-2 absolute top-full left-0 right-0 z-50 mt-2 overflow-hidden animate-fade-in border border-white/10">
+        <div id={listboxId} role="listbox" aria-label="Location suggestions" className="card-2 absolute top-full left-0 right-0 z-50 mt-2 overflow-hidden animate-fade-in border border-white/10">
           {suggestions.map((loc, i) => (
             <button
               key={i}
+              id={`${listboxId}-${i}`}
+              role="option"
+              aria-selected={i === activeIndex}
+              aria-label={[loc.name, loc.admin1, loc.country].filter(Boolean).join(', ')}
               onClick={() => handleSelect(loc)}
-              className="w-full text-left px-4 py-3 flex items-center gap-3 hover:bg-[var(--accent)]/15 transition-colors border-b hairline last:border-0"
+              onMouseEnter={() => setActiveIndex(i)}
+              className={`w-full text-left px-4 py-3 flex items-center gap-3 transition-colors border-b hairline last:border-0 ${
+                i === activeIndex ? 'bg-[var(--accent)]/15' : 'hover:bg-[var(--accent)]/15'
+              }`}
             >
               <span className="text-lg" aria-hidden>📌</span>
               <span className="min-w-0 flex-1">

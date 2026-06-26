@@ -89,8 +89,9 @@ export default function HomePage() {
       </header>
 
       <main className="relative z-10 max-w-6xl mx-auto px-4 py-10 sm:py-14 space-y-7">
-        {/* Hero search */}
-        <div className="text-center space-y-5 animate-fade-up">
+        {/* Hero search — opacity-only fade (no translate) so the search box is
+            clickable at its final position immediately, avoiding a "moved as I clicked" miss */}
+        <div className="text-center space-y-5 animate-fade-in">
           <div className="inline-flex items-center gap-2 pill">
             <span className="h-2 w-2 rounded-full" style={{ background: 'var(--accent)' }} />
             Live data · no API key required

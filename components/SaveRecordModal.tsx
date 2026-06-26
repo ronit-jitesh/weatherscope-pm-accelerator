@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { GeocodedLocation } from '@/types/weather';
+import { apiFetch, errorMessage } from '@/lib/client';
 
 interface Props {
   location: GeocodedLocation;
@@ -22,7 +23,7 @@ export default function SaveRecordModal({ location, onSaved, onClose }: Props) {
     if (startDate > endDate) { setError('Start date must be before end date'); return; }
     setLoading(true);
     try {
-      const res = await fetch('/api/records', {
+      await apiFetch('/api/records', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -32,12 +33,10 @@ export default function SaveRecordModal({ location, onSaved, onClose }: Props) {
           notes: notes || undefined,
         }),
       });
-      const data = await res.json();
-      if (!res.ok) { setError(data.error || 'Failed to save'); return; }
       onSaved();
       onClose();
-    } catch {
-      setError('Network error — please try again');
+    } catch (err) {
+      setError(errorMessage(err));
     } finally {
       setLoading(false);
     }
