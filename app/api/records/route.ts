@@ -80,18 +80,28 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to fetch weather data for that date range' }, { status: 502 });
   }
 
-  const record = await prisma.weatherRecord.create({
-    data: {
-      locationQuery,
-      resolvedName: [location.name, location.admin1, location.country].filter(Boolean).join(', '),
-      latitude: location.latitude,
-      longitude: location.longitude,
-      startDate: new Date(startDate),
-      endDate: new Date(endDate),
-      temperatureData: JSON.stringify(temperatureData),
-      notes: notes ?? null,
-    },
-  });
+  let record;
+  try {
+    record = await prisma.weatherRecord.create({
+      data: {
+        locationQuery,
+        resolvedName: [location.name, location.admin1, location.country].filter(Boolean).join(', '),
+        latitude: location.latitude,
+        longitude: location.longitude,
+        startDate: new Date(startDate),
+        endDate: new Date(endDate),
+        temperatureData: JSON.stringify(temperatureData),
+        notes: notes ?? null,
+      },
+    });
+  } catch (err) {
+    const e = err as { name?: string; code?: string; message?: string };
+    console.error('DB write failed:', e);
+    return NextResponse.json(
+      { error: 'Could not save the record to the database.', debug: { name: e.name, code: e.code, message: e.message?.slice(0, 300) } },
+      { status: 500 },
+    );
+  }
 
   return NextResponse.json({
     record: {
