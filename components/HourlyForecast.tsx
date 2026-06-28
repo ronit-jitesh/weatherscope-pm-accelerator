@@ -1,6 +1,7 @@
 'use client';
 
 import { getWmoInfo } from '@/lib/wmo-codes';
+import { useUnits } from '@/lib/units';
 import type { HourlyPoint } from '@/types/weather';
 
 interface Props {
@@ -23,6 +24,7 @@ function currentHourKey(timezone: string): string {
 }
 
 export default function HourlyForecast({ hourly, timezone }: Props) {
+  const u = useUnits();
   if (!hourly || hourly.length === 0) return null;
 
   const key = currentHourKey(timezone);
@@ -58,7 +60,7 @@ export default function HourlyForecast({ hourly, timezone }: Props) {
           <span className="pill mb-2">Next 24 hours</span>
           <h3 className="text-xl font-semibold">Hour by hour</h3>
         </div>
-        <span className="text-xs text-dim">{Math.round(min)}° – {Math.round(max)}°</span>
+        <span className="text-xs text-dim">{u.tempVal(min)}° – {u.tempVal(max)}°</span>
       </div>
 
       <div className="overflow-x-auto pb-1 -mx-2 px-2" style={{ scrollbarWidth: 'thin' }}>
@@ -77,7 +79,7 @@ export default function HourlyForecast({ hourly, timezone }: Props) {
               <g key={i}>
                 <circle cx={p.x} cy={p.y} r={i === 0 ? 4 : 2.5} fill="var(--accent)" stroke="#000" strokeWidth="1.5" />
                 <text x={p.x} y={p.y - 9} textAnchor="middle" className="fill-white" style={{ fontSize: 11, fontWeight: 600 }}>
-                  {Math.round(hours[i].temperature)}°
+                  {u.tempVal(hours[i].temperature)}°
                 </text>
               </g>
             ))}

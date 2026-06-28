@@ -1,6 +1,7 @@
 'use client';
 
 import { getWmoInfo } from '@/lib/wmo-codes';
+import { useUnits } from '@/lib/units';
 import type { DailyForecast } from '@/types/weather';
 
 interface Props {
@@ -24,6 +25,7 @@ function Droplet({ prob }: { prob: number }) {
 }
 
 export default function ForecastGrid({ daily, timezone }: Props) {
+  const u = useUnits();
   const days = daily.slice(0, 7);
 
   return (
@@ -56,8 +58,8 @@ export default function ForecastGrid({ daily, timezone }: Props) {
               <p className={`text-sm font-bold ${active ? 'text-black' : ''}`}>{dayNum}</p>
               <div className="my-2 text-3xl select-none" aria-hidden>{wmo.emoji}</div>
               <div className="flex items-baseline gap-1.5 text-sm">
-                <span className="font-bold">{Math.round(day.tempMax)}°</span>
-                <span className={active ? 'text-black/60' : 'text-dim'}>{Math.round(day.tempMin)}°</span>
+                <span className="font-bold">{u.tempVal(day.tempMax)}°</span>
+                <span className={active ? 'text-black/60' : 'text-dim'}>{u.tempVal(day.tempMin)}°</span>
               </div>
               <div className={`mt-1.5 flex items-center gap-1 text-[11px] ${active ? 'text-black/70' : 'text-dim'}`}>
                 <Droplet prob={day.precipitationProbabilityMax} />

@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { getRecents, addRecent, getLastLocation, resolveQuery } from '@/lib/recents';
+import { UnitToggle } from '@/lib/units';
 import SearchBar from '@/components/SearchBar';
 import CurrentWeather from '@/components/CurrentWeather';
 import HourlyForecast from '@/components/HourlyForecast';
@@ -103,9 +104,12 @@ export default function HomePage() {
                 <span className="text-[11px] text-dim mt-0.5">by Ronit Jitesh</span>
               </span>
             </Link>
-            <Link href="/history" className="btn-ghost inline-flex items-center gap-2 px-3.5 py-2 text-sm font-medium">
-              🗃️ <span className="hidden sm:inline">History &amp; export</span>
-            </Link>
+            <div className="flex items-center gap-2.5">
+              <UnitToggle />
+              <Link href="/history" className="btn-ghost inline-flex items-center gap-2 px-3.5 py-2 text-sm font-medium">
+                🗃️ <span className="hidden sm:inline">History &amp; export</span>
+              </Link>
+            </div>
           </div>
         </div>
       </header>

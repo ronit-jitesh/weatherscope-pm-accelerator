@@ -2,6 +2,7 @@
 
 import { getWmoInfo } from '@/lib/wmo-codes';
 import { windDirectionLabel } from '@/lib/weather';
+import { useUnits } from '@/lib/units';
 import type { WeatherData } from '@/types/weather';
 
 interface Props {
@@ -10,6 +11,7 @@ interface Props {
 
 /** 270° speedometer-style arc gauge with a yellow fill + dot terminator. */
 function ArcGauge({ temp, min, max, wind }: { temp: number; min: number; max: number; wind: number }) {
+  const u = useUnits();
   const R = 92;
   const CX = 110;
   const CY = 110;
@@ -44,19 +46,20 @@ function ArcGauge({ temp, min, max, wind }: { temp: number; min: number; max: nu
       {/* center readout */}
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <span className="text-6xl font-extralight leading-none tracking-tight">
-          {Math.round(temp)}<span className="align-top text-2xl">°</span>
+          {u.tempVal(temp)}<span className="align-top text-2xl">°</span>
         </span>
-        <span className="mt-1 text-sm text-dim">↑ {Math.round(wind)} km/h</span>
+        <span className="mt-1 text-sm text-dim">↑ {u.wind(wind)}</span>
       </div>
 
       {/* min / max at the arc ends */}
-      <span className="absolute bottom-4 left-1 text-sm text-dim">{Math.round(min)}°</span>
-      <span className="absolute bottom-4 right-1 text-sm text-dim">{Math.round(max)}°</span>
+      <span className="absolute bottom-4 left-1 text-sm text-dim">{u.tempVal(min)}°</span>
+      <span className="absolute bottom-4 right-1 text-sm text-dim">{u.tempVal(max)}°</span>
     </div>
   );
 }
 
 export default function CurrentWeather({ data }: Props) {
+  const u = useUnits();
   const { current, location, daily, timezone } = data;
   const wmo = getWmoInfo(current.weatherCode, current.isDay);
   const today = daily[0];
@@ -78,9 +81,9 @@ export default function CurrentWeather({ data }: Props) {
   }
 
   const chips = [
-    { icon: '🌡️', label: 'Feels like', value: `${Math.round(current.apparentTemperature)}°` },
+    { icon: '🌡️', label: 'Feels like', value: u.temp(current.apparentTemperature) },
     { icon: '💧', label: 'Humidity', value: `${current.humidity}%` },
-    { icon: '🧭', label: 'Wind', value: `${windDirectionLabel(current.windDirection)}` },
+    { icon: '🧭', label: 'Wind', value: `${u.wind(current.windSpeed)} ${windDirectionLabel(current.windDirection)}` },
     { icon: '🌧️', label: 'Rain', value: today ? `${today.precipitationProbabilityMax}%` : '—' },
     { icon: '🔆', label: 'UV index', value: `${Math.round(current.uvIndex)} · ${uvLabel(current.uvIndex)}` },
     { icon: '☁️', label: 'Cloud', value: `${current.cloudCover}%` },
@@ -112,7 +115,7 @@ export default function CurrentWeather({ data }: Props) {
             <span className="text-5xl float-icon select-none" aria-hidden>{wmo.emoji}</span>
             <div>
               <p className="text-xl font-semibold">{wmo.description}</p>
-              <p className="text-sm text-dim">Feels like {Math.round(current.apparentTemperature)}° · {current.humidity}% humidity</p>
+              <p className="text-sm text-dim">Feels like {u.temp(current.apparentTemperature)} · {current.humidity}% humidity</p>
             </div>
           </div>
 
