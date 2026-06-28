@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import { getRecents, addRecent, getLastLocation, resolveQuery } from '@/lib/recents';
 import SearchBar from '@/components/SearchBar';
 import CurrentWeather from '@/components/CurrentWeather';
 import HourlyForecast from '@/components/HourlyForecast';
@@ -23,8 +24,9 @@ export default function HomePage() {
   const [selectedLocation, setSelectedLocation] = useState<GeocodedLocation | null>(null);
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [savedBanner, setSavedBanner] = useState(false);
+  const [recents, setRecents] = useState<GeocodedLocation[]>([]);
 
-  async function handleLocationSelect(location: GeocodedLocation) {
+  const handleLocationSelect = useCallback(async (location: GeocodedLocation) => {
     setSelectedLocation(location);
     setState('loading');
     setWeatherError('');
@@ -58,11 +60,30 @@ export default function HomePage() {
       setWeather(weatherData);
       setAqi(aqiData);
       setState('success');
+
+      // Make it sticky + shareable: remember it, and reflect it in the URL
+      setRecents(addRecent(location));
+      const label = [location.name, location.admin1, location.country].filter(Boolean).join(', ');
+      const url = new URL(window.location.href);
+      url.searchParams.set('q', label);
+      window.history.replaceState(null, '', url.toString());
     } catch (err) {
       setWeatherError(err instanceof Error ? err.message : 'We couldn’t load the weather. Please try again.');
       setState('error');
     }
-  }
+  }, []);
+
+  // On first load: open a shared ?q= link, else reopen your last location
+  useEffect(() => {
+    setRecents(getRecents());
+    const q = new URLSearchParams(window.location.search).get('q');
+    if (q) {
+      resolveQuery(q).then((loc) => { if (loc) handleLocationSelect(loc); });
+      return;
+    }
+    const last = getLastLocation();
+    if (last) handleLocationSelect(last);
+  }, [handleLocationSelect]);
 
   function handleSaved() {
     setSavedBanner(true);
@@ -107,6 +128,22 @@ export default function HomePage() {
           <div className="pt-2">
             <SearchBar onLocationSelect={handleLocationSelect} loading={state === 'loading'} />
           </div>
+
+          {recents.length > 0 && (
+            <div className="flex flex-wrap items-center justify-center gap-2 max-w-2xl mx-auto pt-1">
+              <span className="text-xs text-dim">Recent</span>
+              {recents.map((loc, i) => (
+                <button
+                  key={i}
+                  onClick={() => handleLocationSelect(loc)}
+                  className="px-2.5 py-1 rounded-full bg-[var(--surface-2)] text-dim hover:text-white text-xs transition-colors"
+                  title={[loc.name, loc.admin1, loc.country].filter(Boolean).join(', ')}
+                >
+                  📍 {loc.name}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Loading */}
