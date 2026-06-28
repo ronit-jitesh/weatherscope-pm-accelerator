@@ -70,7 +70,7 @@ export default function DayBrief({ data }: Props) {
       {activities.length > 0 && (
         <div className="mt-4 pt-4 border-t hairline">
           <p className="text-xs text-dim mb-2.5">Good day for…</p>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {activities.map((a) => (
               <div key={a.name} className="card-2 rounded-2xl py-3 flex flex-col items-center gap-1">
                 <span className="text-xl" aria-hidden>{a.icon}</span>

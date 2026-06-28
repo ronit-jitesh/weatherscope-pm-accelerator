@@ -9,6 +9,7 @@ import CurrentWeather from '@/components/CurrentWeather';
 import DayBrief from '@/components/DayBrief';
 import HourlyForecast from '@/components/HourlyForecast';
 import ForecastGrid from '@/components/ForecastGrid';
+import SunArc from '@/components/SunArc';
 import WeatherMap from '@/components/WeatherMap';
 import PackingAdvisory from '@/components/PackingAdvisory';
 import AirQualityCard from '@/components/AirQualityCard';
@@ -187,6 +188,7 @@ export default function HomePage() {
             {weather.hourly?.length > 0 && <HourlyForecast hourly={weather.hourly} timezone={weather.timezone} />}
             {weather.daily[0] && <PackingAdvisory today={weather.daily[0]} />}
             <ForecastGrid daily={weather.daily} timezone={weather.timezone} />
+            {weather.daily[0] && <SunArc today={weather.daily[0]} timezone={weather.timezone} />}
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <WeatherMap
