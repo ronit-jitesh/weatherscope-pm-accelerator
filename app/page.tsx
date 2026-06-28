@@ -108,8 +108,11 @@ export default function HomePage() {
             </Link>
             <div className="flex items-center gap-2.5">
               <UnitToggle />
+              <Link href="/compare" className="btn-ghost inline-flex items-center gap-2 px-3.5 py-2 text-sm font-medium">
+                🆚 <span className="hidden sm:inline">Compare</span>
+              </Link>
               <Link href="/history" className="btn-ghost inline-flex items-center gap-2 px-3.5 py-2 text-sm font-medium">
-                🗃️ <span className="hidden sm:inline">History &amp; export</span>
+                🗃️ <span className="hidden sm:inline">History</span>
               </Link>
             </div>
           </div>
