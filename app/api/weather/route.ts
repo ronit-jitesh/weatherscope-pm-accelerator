@@ -16,10 +16,13 @@ export async function GET(req: NextRequest) {
   const parsed = schema.safeParse({
     latitude: sp.get('latitude'),
     longitude: sp.get('longitude'),
-    name: sp.get('name'),
-    country: sp.get('country'),
-    admin1: sp.get('admin1'),
-    timezone: sp.get('timezone'),
+    // searchParams.get() returns null for absent params, but z.string().optional()
+    // only accepts undefined — coalesce so coordinate/geolocation lookups (which
+    // carry no admin1/name) don't fail validation.
+    name: sp.get('name') ?? undefined,
+    country: sp.get('country') ?? undefined,
+    admin1: sp.get('admin1') ?? undefined,
+    timezone: sp.get('timezone') ?? undefined,
   });
 
   if (!parsed.success) {
