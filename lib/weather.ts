@@ -16,6 +16,10 @@ export async function fetchWeather(location: GeocodedLocation): Promise<WeatherD
     'sunrise', 'sunset', 'uv_index_max',
     'precipitation_probability_max', 'precipitation_sum', 'wind_speed_10m_max',
   ].join(','));
+  url.searchParams.set('hourly', [
+    'temperature_2m', 'apparent_temperature', 'weather_code',
+    'precipitation_probability', 'is_day',
+  ].join(','));
   url.searchParams.set('timezone', location.timezone || 'auto');
   url.searchParams.set('forecast_days', '7');
 
@@ -25,11 +29,20 @@ export async function fetchWeather(location: GeocodedLocation): Promise<WeatherD
   const d = await res.json();
   const c = d.current;
   const daily = d.daily;
+  const hourly = d.hourly;
 
   return {
     location,
     timezone: d.timezone,
     timezoneAbbreviation: d.timezone_abbreviation,
+    hourly: (hourly?.time ?? []).map((time: string, i: number) => ({
+      time,
+      temperature: hourly.temperature_2m[i],
+      apparentTemperature: hourly.apparent_temperature[i],
+      weatherCode: hourly.weather_code[i],
+      precipitationProbability: hourly.precipitation_probability[i],
+      isDay: hourly.is_day[i],
+    })),
     current: {
       temperature: c.temperature_2m,
       apparentTemperature: c.apparent_temperature,

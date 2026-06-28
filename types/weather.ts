@@ -37,10 +37,20 @@ export interface DailyForecast {
   windSpeedMax: number;
 }
 
+export interface HourlyPoint {
+  time: string;
+  temperature: number;
+  apparentTemperature: number;
+  weatherCode: number;
+  precipitationProbability: number;
+  isDay: number;
+}
+
 export interface WeatherData {
   location: GeocodedLocation;
   current: CurrentWeather;
   daily: DailyForecast[];
+  hourly: HourlyPoint[];
   timezone: string;
   timezoneAbbreviation: string;
 }

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import SearchBar from '@/components/SearchBar';
 import CurrentWeather from '@/components/CurrentWeather';
+import HourlyForecast from '@/components/HourlyForecast';
 import ForecastGrid from '@/components/ForecastGrid';
 import WeatherMap from '@/components/WeatherMap';
 import PackingAdvisory from '@/components/PackingAdvisory';
@@ -140,6 +141,7 @@ export default function HomePage() {
             )}
 
             <CurrentWeather data={weather} />
+            {weather.hourly?.length > 0 && <HourlyForecast hourly={weather.hourly} timezone={weather.timezone} />}
             {weather.daily[0] && <PackingAdvisory today={weather.daily[0]} />}
             <ForecastGrid daily={weather.daily} timezone={weather.timezone} />
 
