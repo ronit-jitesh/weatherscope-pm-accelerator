@@ -18,7 +18,25 @@ export default function SearchBar({ onLocationSelect, loading }: Props) {
   const [activeIndex, setActiveIndex] = useState(-1);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const prefetchedRef = useRef<Set<string>>(new Set());
   const listboxId = 'location-suggestions';
+
+  // Warm the server cache for a hovered suggestion so clicking it feels instant.
+  function prefetch(loc: GeocodedLocation) {
+    const key = `${loc.latitude},${loc.longitude}`;
+    if (prefetchedRef.current.has(key)) return;
+    prefetchedRef.current.add(key);
+    const params = new URLSearchParams({
+      latitude: String(loc.latitude),
+      longitude: String(loc.longitude),
+      name: loc.name,
+      country: loc.country,
+      ...(loc.admin1 && { admin1: loc.admin1 }),
+      timezone: loc.timezone || 'auto',
+    });
+    fetch(`/api/weather?${params}`).catch(() => {});
+    fetch(`/api/air-quality?latitude=${loc.latitude}&longitude=${loc.longitude}`).catch(() => {});
+  }
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -199,7 +217,7 @@ export default function SearchBar({ onLocationSelect, loading }: Props) {
               aria-selected={i === activeIndex}
               aria-label={[loc.name, loc.admin1, loc.country].filter(Boolean).join(', ')}
               onClick={() => handleSelect(loc)}
-              onMouseEnter={() => setActiveIndex(i)}
+              onMouseEnter={() => { setActiveIndex(i); prefetch(loc); }}
               className={`w-full text-left px-4 py-3 flex items-center gap-3 transition-colors border-b hairline last:border-0 ${
                 i === activeIndex ? 'bg-[var(--accent)]/15' : 'hover:bg-[var(--accent)]/15'
               }`}

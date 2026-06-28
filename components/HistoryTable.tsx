@@ -5,8 +5,10 @@ import ExportButtons from './ExportButtons';
 import type { WeatherRecordRow } from '@/types/weather';
 import { getWmoInfo } from '@/lib/wmo-codes';
 import { apiFetch, errorMessage } from '@/lib/client';
+import { useUnits } from '@/lib/units';
 
 export default function HistoryTable() {
+  const u = useUnits();
   const [records, setRecords] = useState<WeatherRecordRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -125,8 +127,8 @@ export default function HistoryTable() {
             <tbody>
               {records.map((r) => {
                 const temps = r.temperatureData;
-                const maxTemp = temps.length ? Math.round(Math.max(...temps.map((d) => d.tempMax))) : null;
-                const minTemp = temps.length ? Math.round(Math.min(...temps.map((d) => d.tempMin))) : null;
+                const maxTemp = temps.length ? Math.max(...temps.map((d) => d.tempMax)) : null;
+                const minTemp = temps.length ? Math.min(...temps.map((d) => d.tempMin)) : null;
                 const isEditing = editId === r.id;
 
                 return (
@@ -140,7 +142,7 @@ export default function HistoryTable() {
                       <td className="px-4 py-3.5 text-center text-dim">{temps.length}</td>
                       <td className="px-4 py-3.5 whitespace-nowrap">
                         {maxTemp !== null && minTemp !== null ? (
-                          <span><span className="font-medium">{maxTemp}°</span> <span className="text-dim">/ {minTemp}°</span></span>
+                          <span><span className="font-medium">{u.tempVal(maxTemp)}°</span> <span className="text-dim">/ {u.tempVal(minTemp)}°</span></span>
                         ) : '—'}
                       </td>
                       <td className="px-4 py-3.5 text-xs text-dimmer whitespace-nowrap">{new Date(r.createdAt).toLocaleDateString()}</td>
@@ -217,8 +219,8 @@ export default function HistoryTable() {
                               <div key={d.date} className="card-2 p-2 text-center text-xs">
                                 <p className="text-dimmer text-[10px]">{d.date.slice(5)}</p>
                                 <p className="text-lg my-0.5">{getWmoInfo(d.weatherCode).emoji}</p>
-                                <p className="font-medium">{Math.round(d.tempMax)}°</p>
-                                <p className="text-dim">{Math.round(d.tempMin)}°</p>
+                                <p className="font-medium">{u.tempVal(d.tempMax)}°</p>
+                                <p className="text-dim">{u.tempVal(d.tempMin)}°</p>
                                 {d.precipitationSum > 0 && <p className="text-[10px]" style={{ color: 'var(--accent)' }}>{d.precipitationSum}mm</p>}
                               </div>
                             ))}

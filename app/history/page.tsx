@@ -4,6 +4,7 @@ import Link from 'next/link';
 import HistoryTable from '@/components/HistoryTable';
 import { useState } from 'react';
 import { apiFetch, errorMessage } from '@/lib/client';
+import { UnitToggle } from '@/lib/units';
 
 interface CreatedRecord { record: { resolvedName: string } }
 
@@ -56,12 +57,15 @@ export default function HistoryPage() {
               </Link>
               <span className="font-semibold tracking-tight hidden sm:inline">Saved records</span>
             </div>
-            <button
-              onClick={() => { setShowAddForm((v) => !v); setFormError(''); setFormSuccess(''); }}
-              className="btn-accent px-4 py-2 text-sm"
-            >
-              {showAddForm ? 'Cancel' : '+ New record'}
-            </button>
+            <div className="flex items-center gap-2.5">
+              <UnitToggle />
+              <button
+                onClick={() => { setShowAddForm((v) => !v); setFormError(''); setFormSuccess(''); }}
+                className="btn-accent px-4 py-2 text-sm"
+              >
+                {showAddForm ? 'Cancel' : '+ New record'}
+              </button>
+            </div>
           </div>
         </div>
       </header>

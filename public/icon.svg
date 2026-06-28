@@ -1,0 +1,19 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" fill="#000000"/>
+  <!-- sun -->
+  <g stroke="#FFFF1E" stroke-width="14" stroke-linecap="round">
+    <line x1="300" y1="120" x2="300" y2="92"/>
+    <line x1="356" y1="143" x2="376" y2="123"/>
+    <line x1="379" y1="199" x2="407" y2="199"/>
+    <line x1="356" y1="255" x2="376" y2="275"/>
+    <line x1="244" y1="143" x2="224" y2="123"/>
+  </g>
+  <circle cx="300" cy="199" r="52" fill="#FFFF1E"/>
+  <!-- cloud -->
+  <g fill="#FFFFFF">
+    <circle cx="196" cy="320" r="58"/>
+    <circle cx="256" cy="292" r="74"/>
+    <circle cx="324" cy="322" r="56"/>
+    <rect x="172" y="320" width="170" height="62" rx="31"/>
+  </g>
+</svg>
