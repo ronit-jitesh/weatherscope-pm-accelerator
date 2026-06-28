@@ -14,11 +14,11 @@ const schema = z.object({
 export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams;
   const parsed = schema.safeParse({
-    latitude: sp.get('latitude'),
-    longitude: sp.get('longitude'),
-    // searchParams.get() returns null for absent params, but z.string().optional()
-    // only accepts undefined — coalesce so coordinate/geolocation lookups (which
-    // carry no admin1/name) don't fail validation.
+    // Coalesce null→undefined: searchParams.get() returns null when absent, but
+    // z.coerce.number() would turn null into 0 (so a missing latitude would
+    // silently become "null island"), and z.string().optional() rejects null.
+    latitude: sp.get('latitude') ?? undefined,
+    longitude: sp.get('longitude') ?? undefined,
     name: sp.get('name') ?? undefined,
     country: sp.get('country') ?? undefined,
     admin1: sp.get('admin1') ?? undefined,

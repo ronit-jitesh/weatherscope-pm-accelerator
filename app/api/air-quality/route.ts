@@ -10,8 +10,8 @@ const schema = z.object({
 export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams;
   const parsed = schema.safeParse({
-    latitude: sp.get('latitude'),
-    longitude: sp.get('longitude'),
+    latitude: sp.get('latitude') ?? undefined,
+    longitude: sp.get('longitude') ?? undefined,
   });
 
   if (!parsed.success) {
