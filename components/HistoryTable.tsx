@@ -143,10 +143,10 @@ export default function HistoryTable() {
                       <td className="px-4 py-3.5 whitespace-nowrap">
                         {maxTemp !== null && minTemp !== null ? (
                           <span><span className="font-medium">{u.tempVal(maxTemp)}°</span> <span className="text-dim">/ {u.tempVal(minTemp)}°</span></span>
-                        ) : '—'}
+                        ) : '·'}
                       </td>
                       <td className="px-4 py-3.5 text-xs text-dimmer whitespace-nowrap">{new Date(r.createdAt).toLocaleDateString()}</td>
-                      <td className="px-4 py-3.5 text-xs text-dim max-w-[140px] truncate">{r.notes || '—'}</td>
+                      <td className="px-4 py-3.5 text-xs text-dim max-w-[140px] truncate">{r.notes || '·'}</td>
                       <td className="px-4 py-3.5">
                         <div className="flex items-center gap-1.5">
                           <button

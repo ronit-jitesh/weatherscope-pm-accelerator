@@ -136,8 +136,8 @@ export default function ComparePage() {
                       <div className="mt-4 divide-y divide-white/5 text-sm">
                         {[
                           ['Feels like', u.temp(w.current.apparentTemperature)],
-                          ['High / Low', today ? `${u.tempVal(today.tempMax)}° / ${u.tempVal(today.tempMin)}°` : '—'],
-                          ['Rain chance', today ? `${today.precipitationProbabilityMax}%` : '—'],
+                          ['High / Low', today ? `${u.tempVal(today.tempMax)}° / ${u.tempVal(today.tempMin)}°` : '·'],
+                          ['Rain chance', today ? `${today.precipitationProbabilityMax}%` : '·'],
                           ['Wind', `${u.wind(w.current.windSpeed)} ${windDirectionLabel(w.current.windDirection)}`],
                           ['Humidity', `${w.current.humidity}%`],
                           ['UV index', `${Math.round(w.current.uvIndex)}`],

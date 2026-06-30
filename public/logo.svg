@@ -1,0 +1,31 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="glowWhite" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="6" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="glowYellow" x="-90%" y="-90%" width="280%" height="280%">
+      <feGaussianBlur stdDeviation="9" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- raindrop, peeking above the cloud -->
+  <path d="M256 96 C256 96 312 168 312 208 a56 56 0 1 1 -112 0 C200 168 256 96 256 96 Z"
+        fill="#000000" stroke="#ffffff" stroke-width="16" stroke-linejoin="round" filter="url(#glowWhite)"/>
+
+  <!-- cloud -->
+  <path d="M178 392 a62 62 0 0 1 -8 -123 a82 82 0 0 1 158 -12 a58 58 0 0 1 8 135 Z"
+        fill="#000000" stroke="#ffffff" stroke-width="16" stroke-linejoin="round" filter="url(#glowWhite)"/>
+
+  <!-- lightning bolt -->
+  <path d="M270 250 L220 326 H250 L238 384 L300 300 H268 L286 250 Z"
+        fill="#EFFF00" stroke="#EFFF00" stroke-width="2" stroke-linejoin="round" filter="url(#glowYellow)"/>
+</svg>

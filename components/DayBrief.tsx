@@ -39,9 +39,9 @@ export default function DayBrief({ data }: Props) {
         <span className="hashes mt-1" aria-hidden />
       </div>
 
-      {/* Best outdoor window — the headline */}
+      {/* Best outdoor window, the headline */}
       {best && (
-        <div className="mb-4 rounded-2xl p-4 flex items-center gap-3" style={{ background: 'var(--accent)', color: '#000' }}>
+        <div className="mb-4 rounded-2xl p-4 flex items-center gap-3 neon" style={{ background: 'var(--accent)', color: '#000' }}>
           <span className="text-2xl" aria-hidden>🌤️</span>
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide opacity-70">Best time to be outside</p>

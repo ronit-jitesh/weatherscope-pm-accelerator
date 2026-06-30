@@ -50,7 +50,7 @@ export default function ForecastGrid({ daily, timezone }: Props) {
             <div
               key={day.date}
               className={`rounded-[26px] p-3.5 flex flex-col items-center text-center lift ${
-                active ? 'text-black' : 'card-2 text-white'
+                active ? 'text-black neon' : 'card-2 text-white'
               }`}
               style={active ? { background: 'var(--accent)' } : undefined}
             >

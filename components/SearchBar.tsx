@@ -45,7 +45,7 @@ export default function SearchBar({ onLocationSelect, loading }: Props) {
       }
     }
     // Use 'click' (not 'mousedown') so a click on a suggestion selects it
-    // before the outside-close fires — avoids a select-vs-close race.
+    // before the outside-close fires, avoids a select-vs-close race.
     document.addEventListener('click', handleClick);
     return () => document.removeEventListener('click', handleClick);
   }, []);
@@ -68,7 +68,7 @@ export default function SearchBar({ onLocationSelect, loading }: Props) {
         setError('');
       }
     } catch {
-      setError('Search failed — check your connection');
+      setError('Search failed, check your connection');
     } finally {
       setSearching(false);
     }
@@ -148,8 +148,8 @@ export default function SearchBar({ onLocationSelect, loading }: Props) {
       (err) => {
         setGeoLoading(false);
         setError(
-          err.code === 1 ? 'Location access denied — please allow location permissions'
-          : err.code === 2 ? 'Location unavailable — try searching manually'
+          err.code === 1 ? 'Location access denied, please allow location permissions'
+          : err.code === 2 ? 'Location unavailable, try searching manually'
           : 'Location request timed out',
         );
       },

@@ -100,7 +100,8 @@ export default function HomePage() {
         <div className="bg-black/80 backdrop-blur-md border-b hairline">
           <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2.5">
-              <span className="grid h-9 w-9 place-items-center rounded-xl text-black text-lg font-bold" style={{ background: 'var(--accent)' }}>⛅</span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo.svg" alt="WeatherScope" className="h-10 w-10" />
               <span className="flex flex-col leading-none">
                 <span className="font-bold tracking-tight">WeatherScope</span>
                 <span className="text-[11px] text-dim mt-0.5">by Ronit Jitesh</span>
@@ -120,18 +121,18 @@ export default function HomePage() {
       </header>
 
       <main className="relative z-10 max-w-6xl mx-auto px-4 py-10 sm:py-14 space-y-7">
-        {/* Hero search — opacity-only fade (no translate) so the search box is
+        {/* Hero search, opacity-only fade (no translate) so the search box is
             clickable at its final position immediately, avoiding a "moved as I clicked" miss */}
         <div className="text-center space-y-5 animate-fade-in">
           <div className="inline-flex items-center gap-2 pill">
-            <span className="h-2 w-2 rounded-full" style={{ background: 'var(--accent)' }} />
+            <span className="h-2 w-2 rounded-full neon-dot" style={{ background: 'var(--accent)' }} />
             Live data · no API key required
           </div>
           <h1 className="text-4xl sm:text-6xl font-bold tracking-tight leading-[1.05]">
-            Make weather data<br /><span style={{ color: 'var(--accent)' }}>work for you</span>
+            Make weather data<br /><span className="neon-text" style={{ color: 'var(--accent)' }}>work for you</span>
           </h1>
           <p className="text-dim text-base sm:text-lg max-w-xl mx-auto">
-            Live conditions, a seven-day outlook, air quality, and a smart packing brief —
+            Live conditions, an hourly and seven-day outlook, air quality, and smart insights
             for any city, postcode, landmark, or coordinate on Earth.
           </p>
           <div className="pt-2">
@@ -228,7 +229,7 @@ export default function HomePage() {
           <div className="text-center py-12 animate-fade-up" style={{ animationDelay: '0.1s' }}>
             <div className="text-7xl mb-4 float-icon inline-block">🌍</div>
             <p className="text-lg font-medium">Search a place to begin</p>
-            <p className="text-sm text-dim mt-1">Real conditions, real data — for anywhere on the map.</p>
+            <p className="text-sm text-dim mt-1">Real conditions, real data, for anywhere on the map.</p>
           </div>
         )}
 

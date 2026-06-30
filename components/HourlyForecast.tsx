@@ -74,7 +74,7 @@ export default function HourlyForecast({ hourly, timezone }: Props) {
               </linearGradient>
             </defs>
             <path d={areaPath} fill="url(#hourlyFill)" />
-            <path d={linePath} fill="none" stroke="var(--accent)" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+            <path className="neon-svg" d={linePath} fill="none" stroke="var(--accent)" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
             {pts.map((p, i) => (
               <g key={i}>
                 <circle cx={p.x} cy={p.y} r={i === 0 ? 4 : 2.5} fill="var(--accent)" stroke="#000" strokeWidth="1.5" />

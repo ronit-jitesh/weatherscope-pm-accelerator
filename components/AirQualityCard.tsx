@@ -7,7 +7,7 @@ interface Props {
 }
 
 function aqiInfo(aqi: number) {
-  if (aqi <= 20) return { label: 'Good', advice: 'Air is fresh — perfect for the outdoors.' };
+  if (aqi <= 20) return { label: 'Good', advice: 'Air is fresh, perfect for the outdoors.' };
   if (aqi <= 40) return { label: 'Fair', advice: 'Generally clean air with little concern.' };
   if (aqi <= 60) return { label: 'Moderate', advice: 'Sensitive groups should take it easy outdoors.' };
   if (aqi <= 80) return { label: 'Poor', advice: 'Consider limiting prolonged outdoor effort.' };

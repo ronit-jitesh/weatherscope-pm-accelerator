@@ -75,7 +75,7 @@ export default function HistoryPage() {
           <span className="pill mb-2">CRUD</span>
           <h1 className="text-3xl font-bold tracking-tight">Your weather history</h1>
           <p className="text-dim text-sm mt-1.5 max-w-2xl">
-            Create, read, update, and delete saved records — each one stores real temperature data for a place and date range. Export any of it as JSON, CSV, XML, Markdown, or PDF.
+            Create, read, update, and delete saved records, each one stores real temperature data for a place and date range. Export any of it as JSON, CSV, XML, Markdown, or PDF.
           </p>
         </div>
 
@@ -141,7 +141,7 @@ export default function HistoryPage() {
               </button>
             </div>
             <p className="text-xs text-dimmer mt-3">
-              The location is validated via geocoding. Date ranges can reach back to 1940 and up to 16 days ahead — maximum 365 days.
+              The location is validated via geocoding. Date ranges can reach back to 1940 and up to 16 days ahead, maximum 365 days.
             </p>
           </form>
         )}

@@ -13,6 +13,7 @@
 
   --accent: #ffff1e;        /* electric yellow (palette slide) */
   --accent-soft: #f6ff7a;
+  --neon: 255 255 30;       /* accent as rgb channels, for glow shadows */
 
   --border: 255 255 255;    /* rgb channels for hairlines */
 }
@@ -91,7 +92,14 @@ body {
 .pill-accent {
   background: var(--accent);
   color: #000;
+  box-shadow: 0 0 10px rgb(var(--neon) / 0.45), 0 0 22px rgb(var(--neon) / 0.22);
 }
+
+/* ── Neon helpers ── */
+.neon { box-shadow: 0 0 14px rgb(var(--neon) / 0.5), 0 0 30px rgb(var(--neon) / 0.25); }
+.neon-text { text-shadow: 0 0 12px rgb(var(--neon) / 0.55), 0 0 28px rgb(var(--neon) / 0.3); }
+.neon-svg { filter: drop-shadow(0 0 3px rgb(var(--neon) / 0.85)) drop-shadow(0 0 7px rgb(var(--neon) / 0.45)); }
+.neon-dot { box-shadow: 0 0 8px rgb(var(--neon) / 0.9), 0 0 16px rgb(var(--neon) / 0.5); }
 
 .text-dim { color: var(--text-dim); }
 .text-dimmer { color: var(--text-dimmer); }
@@ -113,9 +121,10 @@ body {
   color: #000;
   font-weight: 700;
   border-radius: 9999px;
-  transition: transform 0.2s ease, filter 0.2s ease;
+  box-shadow: 0 0 12px rgb(var(--neon) / 0.4), 0 0 26px rgb(var(--neon) / 0.18);
+  transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
 }
-.btn-accent:hover { filter: brightness(1.05); }
+.btn-accent:hover { filter: brightness(1.05); box-shadow: 0 0 16px rgb(var(--neon) / 0.6), 0 0 36px rgb(var(--neon) / 0.3); }
 .btn-accent:active { transform: scale(0.96); }
 
 .btn-ghost {

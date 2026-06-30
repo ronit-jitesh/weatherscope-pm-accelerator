@@ -1,11 +1,11 @@
 export default function AboutPMA() {
   const services = [
-    { title: 'PMA Pro', desc: 'End-to-end PM job-hunting program — FAANG-level skills, unlimited mock interviews, and referrals through our largest alumni network. 25% of offers come from tier-1 companies, paying up to $800K/year.' },
-    { title: 'AI PM Bootcamp', desc: 'Build a real AI product alongside engineers, data scientists, and designers — then launch it to our 100,000+ PM community.' },
+    { title: 'PMA Pro', desc: 'End-to-end PM job-hunting program, FAANG-level skills, unlimited mock interviews, and referrals through our largest alumni network. 25% of offers come from tier-1 companies, paying up to $800K/year.' },
+    { title: 'AI PM Bootcamp', desc: 'Build a real AI product alongside engineers, data scientists, and designers, then launch it to our 100,000+ PM community.' },
     { title: 'PMA Power Skills', desc: 'Sharpen product, leadership, and executive-presentation skills for working product managers.' },
     { title: 'PMA Leader', desc: 'Accelerate to Director and product-executive levels, and learn to win in the boardroom.' },
     { title: '1:1 Resume Review', desc: 'Rewrite a standout PM resume with an interview guarantee. Free template used by 14,000+ PMs at drnancyli.com/pmresume.' },
-    { title: '500+ Free Courses', desc: 'Free training on YouTube @drnancyli and Instagram @drnancyli — start learning today.' },
+    { title: '500+ Free Courses', desc: 'Free training on YouTube @drnancyli and Instagram @drnancyli, start learning today.' },
   ];
 
   return (
@@ -27,7 +27,7 @@ export default function AboutPMA() {
           From students seeking entry-level roles to Directors stepping into leadership, the program has helped hundreds of people fulfil their career aspirations.
         </p>
         <p>
-          Our community is ambitious and committed. Through the program they learn, hone, and develop new PM and leadership skills — building a strong foundation for everything that comes next.
+          Our community is ambitious and committed. Through the program they learn, hone, and develop new PM and leadership skills, building a strong foundation for everything that comes next.
         </p>
       </div>
 

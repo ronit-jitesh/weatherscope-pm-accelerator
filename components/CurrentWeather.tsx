@@ -36,11 +36,12 @@ function ArcGauge({ temp, min, max, wind }: { temp: number; min: number; max: nu
         />
         {/* fill */}
         <circle
+          className="neon-svg"
           cx={CX} cy={CY} r={R} fill="none" stroke="var(--accent)" strokeWidth="14" strokeLinecap="round"
           strokeDasharray={`${fillLen} ${C}`} transform={`rotate(135 ${CX} ${CY})`}
         />
         {/* dot */}
-        <circle cx={dotX} cy={dotY} r="9" fill="var(--accent)" stroke="#000" strokeWidth="2" />
+        <circle className="neon-svg" cx={dotX} cy={dotY} r="9" fill="var(--accent)" stroke="#000" strokeWidth="2" />
       </svg>
 
       {/* center readout */}
@@ -70,7 +71,7 @@ export default function CurrentWeather({ data }: Props) {
   });
 
   const fmt = (iso?: string) =>
-    iso ? new Date(iso).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZone: timezone }) : '—';
+    iso ? new Date(iso).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZone: timezone }) : '·';
 
   function uvLabel(uv: number) {
     if (uv <= 2) return 'Low';
@@ -84,7 +85,7 @@ export default function CurrentWeather({ data }: Props) {
     { icon: '🌡️', label: 'Feels like', value: u.temp(current.apparentTemperature) },
     { icon: '💧', label: 'Humidity', value: `${current.humidity}%` },
     { icon: '🧭', label: 'Wind', value: `${u.wind(current.windSpeed)} ${windDirectionLabel(current.windDirection)}` },
-    { icon: '🌧️', label: 'Rain', value: today ? `${today.precipitationProbabilityMax}%` : '—' },
+    { icon: '🌧️', label: 'Rain', value: today ? `${today.precipitationProbabilityMax}%` : '·' },
     { icon: '🔆', label: 'UV index', value: `${Math.round(current.uvIndex)} · ${uvLabel(current.uvIndex)}` },
     { icon: '☁️', label: 'Cloud', value: `${current.cloudCover}%` },
     { icon: '🌅', label: 'Sunrise', value: fmt(today?.sunrise) },
