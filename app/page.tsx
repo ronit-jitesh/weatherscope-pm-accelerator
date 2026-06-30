@@ -101,7 +101,7 @@ export default function HomePage() {
           <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2.5">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.svg" alt="WeatherScope" className="h-10 w-10" />
+              <img src="/logo.png" alt="WeatherScope" className="h-10 w-10 rounded-lg object-cover" />
               <span className="flex flex-col leading-none">
                 <span className="font-bold tracking-tight">WeatherScope</span>
                 <span className="text-[11px] text-dim mt-0.5">by Ronit Jitesh</span>
