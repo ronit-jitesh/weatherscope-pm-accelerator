@@ -1,182 +1,96 @@
-# WeatherScope — Full-Stack Weather Intelligence App
+# WeatherScope
 
-> **PM Accelerator AI Engineer Intern Technical Assessment — Full Stack (Assessment #1 + #2)**  
-> Built by **Ronit Jitesh** · [s2889071@ed.ac.uk](mailto:s2889071@ed.ac.uk)
+**Live demo:** [weather-sigma-pink-57.vercel.app](https://weather-sigma-pink-57.vercel.app)
+**Designed and built by [Ronit Jitesh](https://ronit-jitesh.github.io)** · [GitHub](https://github.com/ronit-jitesh) · [LinkedIn](https://www.linkedin.com/in/ronit-jitesh-440a1319b)
 
----
-
-## What This App Does
-
-WeatherScope is a production-quality full-stack weather application that covers **both** Tech Assessment #1 (frontend) and Tech Assessment #2 (backend). It lets users search any location, get real-time weather data, and manage a persistent database of weather records with full CRUD operations and multi-format data export.
-
-### Assessment Coverage
-
-| Requirement | Status | Implementation |
-|---|---|---|
-| Flexible location input | ✅ | City/town, zip/postal, GPS coords (`lat,lon`), landmarks via Nominatim fallback |
-| Current weather + details | ✅ | Temperature, feels-like, humidity, wind, pressure, cloud cover, UV, precip prob |
-| Browser geolocation | ✅ | `navigator.geolocation` → auto-resolves to nearest city |
-| Weather icons | ✅ | Emoji-based WMO code mapping (100% coverage, no external CDN) |
-| 5-day (7-day) forecast | ✅ | Responsive grid showing max/min/precip/UV per day |
-| Error handling | ✅ | Invalid location, API failure, coordinate out-of-range — all user-facing |
-| Responsive design | ✅ | Tailwind CSS breakpoints: stacks on mobile, grid on tablet/desktop |
-| CREATE + validation | ✅ | Date range validation (start < end, max 365 days, 1940–today+16) + location geocoding validation |
-| READ all records | ✅ | Table with expandable daily data, no row-level auth needed |
-| UPDATE records | ✅ | Re-validates location + dates on edit, re-fetches weather data |
-| DELETE records | ✅ | Confirmation modal before deletion |
-| Export formats | ✅ | JSON, CSV, XML, Markdown, PDF — all via `/api/export?format=` |
-| Stand-apart API (Map) | ✅ | Interactive Leaflet + OpenStreetMap map — pan/zoom, no API key |
-| Stand-apart (AQI) | ✅ | Open-Meteo Air Quality API: PM2.5, PM10, European AQI, US AQI |
-| Non-obvious features | ✅ | "What to Pack/Wear" advisory driven by feels-like, UV, precip, wind, weather code |
+A full-stack weather platform that turns raw forecast data into decisions. Search any
+city, postcode, landmark or raw coordinate on Earth and get live conditions, hourly and
+seven-day forecasts, air quality, and a smart day brief, all wrapped in a custom black
+and neon-yellow design system with real 3D depth. Installable as an app, works offline,
+and runs entirely on free, keyless APIs.
 
 ---
 
-## Non-Obvious Traveller Features
+## What it does
 
-The "What to Pack" advisory answers the rubric's hint: *"what should a traveller consider that might not be obvious?"*
+**Forecasting**
+- Current conditions with a hand-built SVG arc gauge (temperature, feels-like, wind, UV, humidity, pressure, cloud cover, sunrise and sunset)
+- Hour-by-hour temperature curve for the next 24 hours
+- Seven-day outlook with precipitation trend
+- Daylight sun-arc showing the sun's live position between sunrise and sunset
+- Air quality (PM2.5, PM10, EU and US AQI) on a matching arc gauge
 
-- **Feels-like temperature** (not just the reading) determines clothing layers
-- **UV index** (from WHO thresholds) triggers sunscreen and hat recommendations
-- **Precipitation probability** (not just current rain) triggers umbrella/rain gear
-- **Wind speed gusts** trigger windbreaker or windproof coat
-- **Sunrise/sunset** displayed for daylight planning across timezones
-- **Air Quality Index** (PM2.5, PM10, EU AQI) for health-conscious travellers
+**Intelligence**
+- Smart day brief: best outdoor window, umbrella timing ("rain likely around 3pm"), UV and severe-weather flags, and activity verdicts for running, cycling, picnics and photography
+- "What to pack" advisory derived from feels-like temperature, UV, rain and wind
 
-All derived from the same Open-Meteo API call — zero extra cost, high perceived intelligence.
+**Product**
+- Flexible location search: city, town, postcode, landmark (Nominatim fallback) or raw `lat,lon`, with keyboard navigation and full ARIA combobox semantics
+- Browser geolocation, recent locations, last-location memory, shareable `?q=` deep links
+- Compare up to three cities side by side, with warmest and driest auto-flagged
+- °C/°F and km/h/mph toggle, persisted
+- Full CRUD: save weather records for any location and date range (back to 1940), edit, delete, and export as JSON, CSV, XML, Markdown or PDF
+- Installable PWA with an offline app shell
 
----
+**Design**
+- Black + electric-yellow (#FFFF1E) neon design system, built from scratch with Tailwind
+- 3D particle field with mouse parallax, 3D tilt on cards, layered depth shadows
+- Renders at full device pixel ratio, crisp on retina and 4K displays
+- Responsive from phones to desktops; respects `prefers-reduced-motion`
 
-## Tech Stack
+## Stack
 
-| Layer | Choice | Why |
-|---|---|---|
-| Framework | Next.js 16 (App Router, TypeScript) | Full-stack in one project; Server Actions and API routes |
-| Styling | Tailwind CSS | Utility-first, responsive by default |
-| Database | Supabase Postgres via `@prisma/adapter-pg` | Hosted Postgres; persists on serverless/Vercel (unlike a local SQLite file) |
-| ORM | Prisma v7 | Type-safe queries, migrations, Studio viewer |
-| Weather API | Open-Meteo | No API key, no credit card; forecast + ERA5 archive back to 1940 |
-| Geocoding | Open-Meteo Geocoding + Nominatim | City/postal/coord support; Nominatim for landmarks |
-| Map | React-Leaflet + OpenStreetMap (dark CARTO tiles) | No billing account; MIT licensed; interactive pan/zoom |
-| Validation | Zod | Schema-first validation on both API input and CRUD forms |
-| Export | papaparse (CSV) + xmlbuilder2 (XML) + pdfkit (PDF) | Lightest reliable option per format |
+| Layer | Choice |
+|---|---|
+| Framework | Next.js 16 (App Router, TypeScript) |
+| Styling | Tailwind CSS 4, custom design tokens |
+| Database | Supabase Postgres via Prisma 7 (`@prisma/adapter-pg`) |
+| Validation | Zod on every API boundary |
+| Weather | [Open-Meteo](https://open-meteo.com) forecast, archive (ERA5, back to 1940), air quality and geocoding APIs. No keys. |
+| Geocoding fallback | Nominatim (OpenStreetMap) for landmarks |
+| Map | React-Leaflet with dark CARTO tiles |
+| Export | papaparse (CSV), xmlbuilder2 (XML), pdfkit (PDF) |
 
----
+## Architecture notes
 
-## API Choices & Tradeoffs
+- The browser talks only to the app's own `/api/*` routes; the server fans out to
+  Open-Meteo and Nominatim. No third-party keys, no CORS issues, responses cached
+  server-side and prefetched on suggestion hover so selecting a result feels instant.
+- The CREATE flow validates the date range and geocodes the location, then splits the
+  range across Open-Meteo's archive endpoint (past) and forecast endpoint (future).
+- The insights engine is deterministic rules over hourly data, not an LLM: cheap,
+  instant, and explainable.
+- SQLite was the original store; it hard-fails on Vercel's read-only serverless
+  filesystem, so persistence moved to Supabase Postgres behind a least-privilege
+  database role.
 
-**Why Open-Meteo over OpenWeatherMap/WeatherAPI?**  
-The CREATE requirement asks for historical temperature over a date range. OpenWeatherMap charges for history (credit card required). Open-Meteo provides free ERA5 archive back to 1940 with no key, no sign-up, no card. Rate limits: <10,000 calls/day, 5,000/hour, 600/minute.
-
-**Why Leaflet over Google Maps?**  
-Google Maps JavaScript API requires a billing account. Leaflet + OpenStreetMap is MIT-licensed with no key, no account, and no billing — and looks identical in a demo.
-
-**Alternative if you need commercial rights:** Visual Crossing Timeline API (1,000 calls/day free, commercial license included, unified past+future endpoint).
-
----
-
-## Running Locally
-
-### Prerequisites
-- Node.js 18+
-- npm
-
-### Setup
+## Run it locally
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/ronit-jitesh/weatherscope-pm-accelerator.git
 cd weather
 npm install
-cp .env.example .env          # then paste your Supabase Postgres URL into .env
-npx prisma migrate deploy     # applies prisma/migrations to your database
+cp .env.example .env    # paste your Postgres connection string
+npx prisma migrate deploy
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+The only environment variable is `DATABASE_URL` (any Postgres works; Supabase's
+transaction pooler string is what production uses). Weather and maps need no keys.
 
-### Environment Variables
+## API
 
-No weather/map API keys are required. The only required variable is the database
-connection string:
-
-```
-DATABASE_URL="postgresql://postgres.<ref>:<password>@aws-0-<region>.pooler.supabase.com:6543/postgres"
-```
-
-Use the Supabase **transaction pooler** string (port `6543`) — it's the connection
-mode recommended for serverless/Vercel. On Vercel, set `DATABASE_URL` in
-Project → Settings → Environment Variables.
-
-The app talks to Postgres through Prisma's `@prisma/adapter-pg` driver adapter
-(`lib/prisma.ts`), so it runs cleanly on serverless where a local SQLite file can't
-be written.
-
----
-
-## API Reference
-
-| Route | Method | Description |
+| Route | Method | Purpose |
 |---|---|---|
-| `/api/geocode?query=` | GET | Resolve location string → lat/lon (coord detect → Open-Meteo → Nominatim fallback) |
-| `/api/weather?latitude=&longitude=` | GET | Current weather + 7-day forecast from Open-Meteo |
-| `/api/air-quality?latitude=&longitude=` | GET | PM2.5, PM10, EU AQI, US AQI |
-| `/api/records` | GET | List all stored weather records |
-| `/api/records` | POST | Create record: validate location + dates → fetch data → store |
-| `/api/records/[id]` | GET | Get single record |
-| `/api/records/[id]` | PUT | Update record (re-validates location/dates if changed) |
-| `/api/records/[id]` | DELETE | Delete record |
-| `/api/export?format=json|csv|xml|markdown|pdf` | GET | Export all records (or `&id=` for single) |
-
----
-
-## Project Structure
-
-```
-app/
-  api/
-    geocode/route.ts      — Location resolution
-    weather/route.ts      — Current + forecast
-    air-quality/route.ts  — AQI
-    records/route.ts      — CRUD list + create
-    records/[id]/route.ts — CRUD single
-    export/route.ts       — Multi-format export
-  page.tsx                — Main weather page
-  history/page.tsx        — CRUD history page
-components/
-  SearchBar.tsx           — Debounced search + geolocation
-  CurrentWeather.tsx      — Hero weather card
-  ForecastGrid.tsx        — 7-day responsive grid
-  WeatherMap.tsx          — Leaflet map (dynamic SSR-safe import)
-  PackingAdvisory.tsx     — "What to pack" advisory
-  AirQualityCard.tsx      — AQI display
-  SaveRecordModal.tsx     — Date range selector + DB save
-  HistoryTable.tsx        — Full CRUD table with inline edit
-  ExportButtons.tsx       — Format download buttons
-  AboutPMA.tsx            — PM Accelerator section
-lib/
-  prisma.ts               — Prisma client singleton
-  geocode.ts              — Location resolution logic
-  weather.ts              — Open-Meteo API wrappers
-  wmo-codes.ts            — WMO weather code → emoji/description
-  packing-advisory.ts     — Deterministic packing rules engine
-  export.ts               — CSV/XML/PDF/Markdown generators
-types/
-  weather.ts              — Shared TypeScript types
-prisma/
-  schema.prisma           — WeatherRecord model (Postgres)
-  migrations/             — SQL migrations (applied to Supabase Postgres)
-lib/
-  client.ts               — fetch wrapper: server-error vs network-error
-```
-
----
+| `/api/geocode?query=` | GET | Resolve free text to coordinates (coordinate parse → Open-Meteo → Nominatim) |
+| `/api/weather` | GET | Current + hourly + 7-day forecast |
+| `/api/air-quality` | GET | PM2.5, PM10, EU/US AQI |
+| `/api/records` | GET, POST | List and create weather records (Zod-validated) |
+| `/api/records/[id]` | GET, PUT, DELETE | Read, update, delete a record |
+| `/api/export?format=` | GET | Export records as json, csv, xml, markdown or pdf |
 
 ## Attribution
 
-- Weather data: [Open-Meteo.com](https://open-meteo.com) (CC BY 4.0)
-- Map data: © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors
-- Geocoding fallback: [Nominatim / OpenStreetMap](https://nominatim.openstreetmap.org)
-
----
-
-*Built for PM Accelerator AI Engineer Intern Technical Assessment — Full Stack*  
-*Ronit Jitesh · June 2026*
+Weather data by [Open-Meteo](https://open-meteo.com) (CC BY 4.0). Map data
+© [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors, tiles © CARTO.
+Geocoding fallback by Nominatim.

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import HistoryTable from '@/components/HistoryTable';
+import Scene3D from '@/components/Scene3D';
 import { useState } from 'react';
 import { apiFetch, errorMessage } from '@/lib/client';
 import { UnitToggle } from '@/lib/units';
@@ -48,6 +49,7 @@ export default function HistoryPage() {
 
   return (
     <div className="relative min-h-screen grain ambient-glow">
+      <Scene3D />
       <header className="sticky top-0 z-40">
         <div className="bg-black/80 backdrop-blur-md border-b hairline">
           <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">

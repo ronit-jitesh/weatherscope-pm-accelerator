@@ -2,7 +2,7 @@
  * Small fetch wrapper for client components.
  *
  * Distinguishes a *server* error (the request reached the server, which
- * replied non-2xx — possibly with a non-JSON body, e.g. a 500 HTML page)
+ * replied non-2xx, possibly with a non-JSON body, e.g. a 500 HTML page)
  * from a genuine *network* failure (fetch threw). Without this, a 500 whose
  * body isn't JSON makes `res.json()` throw and gets mislabelled as a
  * "network error", sending the user into a pointless retry loop.
@@ -37,5 +37,5 @@ export async function apiFetch<T = unknown>(url: string, options?: RequestInit):
 export function errorMessage(err: unknown): string {
   if (err instanceof ApiError) return err.message;
   // fetch() itself threw → genuine connectivity problem
-  return 'Network error — couldn’t reach the server. Check your connection.';
+  return 'Network error, couldn’t reach the server. Check your connection.';
 }

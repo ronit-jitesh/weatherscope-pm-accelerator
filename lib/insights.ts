@@ -102,7 +102,7 @@ export function getInsights(weather: WeatherData): Insight[] {
     out.push({
       icon: isStorm ? '⛈️' : '⚠️',
       title: isStorm ? 'Thunderstorms expected' : 'Rough weather ahead',
-      detail: `Around ${fmtTime(severeHour.time, tz)} — plan indoor time and avoid being caught out.`,
+      detail: `Around ${fmtTime(severeHour.time, tz)}, plan indoor time and avoid being caught out.`,
       tone: 'warn',
     });
   }
@@ -122,14 +122,14 @@ export function getInsights(weather: WeatherData): Insight[] {
       out.push({
         icon: '🌦️',
         title: 'Showers possible',
-        detail: `A ${showers.precipitationProbability}% chance around ${fmtTime(showers.time, tz)} — maybe pack a layer.`,
+        detail: `A ${showers.precipitationProbability}% chance around ${fmtTime(showers.time, tz)}, maybe pack a layer.`,
         tone: 'info',
       });
     } else {
       out.push({
         icon: '✅',
         title: 'Dry for the next 24 hours',
-        detail: 'No meaningful rain expected — no umbrella needed.',
+        detail: 'No meaningful rain expected, no umbrella needed.',
         tone: 'good',
       });
     }
@@ -151,7 +151,7 @@ export function getInsights(weather: WeatherData): Insight[] {
     out.push({
       icon: '💨',
       title: 'Breezy day',
-      detail: `Gusts up to ${Math.round(today.windSpeedMax)} km/h — secure loose items, mind cyclists.`,
+      detail: `Gusts up to ${Math.round(today.windSpeedMax)} km/h, secure loose items, mind cyclists.`,
       tone: 'info',
     });
   }

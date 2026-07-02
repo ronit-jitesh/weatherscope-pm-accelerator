@@ -26,7 +26,7 @@ export function addRecent(loc: GeocodedLocation): GeocodedLocation[] {
     localStorage.setItem(KEY, JSON.stringify(next));
     localStorage.setItem(LAST, JSON.stringify(loc));
   } catch {
-    /* storage full / disabled — non-fatal */
+    /* storage full / disabled, non-fatal */
   }
   return next;
 }

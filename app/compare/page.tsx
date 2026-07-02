@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import SearchBar from '@/components/SearchBar';
+import Scene3D from '@/components/Scene3D';
 import { UnitToggle, useUnits } from '@/lib/units';
 import { getWmoInfo } from '@/lib/wmo-codes';
 import { windDirectionLabel } from '@/lib/weather';
@@ -55,6 +56,7 @@ export default function ComparePage() {
 
   return (
     <div className="relative min-h-screen grain ambient-glow">
+      <Scene3D />
       <header className="sticky top-0 z-40">
         <div className="bg-black/80 backdrop-blur-md border-b hairline">
           <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">

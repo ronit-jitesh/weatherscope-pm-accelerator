@@ -48,7 +48,7 @@ export function UnitsProvider({ children }: { children: ReactNode }) {
 export function useUnits(): UnitsContext {
   const ctx = useContext(Ctx);
   if (!ctx) {
-    // Safe fallback (metric) if used outside a provider — keeps components resilient.
+    // Safe fallback (metric) if used outside a provider, keeps components resilient.
     return {
       system: 'metric',
       setSystem: () => {},

@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
   // Validate location
   const locations = await resolveLocation(locationQuery);
   if (locations.length === 0) {
-    return NextResponse.json({ error: 'Location not found — please try a different name or use coordinates' }, { status: 422 });
+    return NextResponse.json({ error: 'Location not found. Try a different name or use coordinates.' }, { status: 422 });
   }
   const location = locations[0];
 

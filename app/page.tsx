@@ -14,7 +14,9 @@ import WeatherMap from '@/components/WeatherMap';
 import PackingAdvisory from '@/components/PackingAdvisory';
 import AirQualityCard from '@/components/AirQualityCard';
 import SaveRecordModal from '@/components/SaveRecordModal';
-import AboutPMA from '@/components/AboutPMA';
+import AboutProject from '@/components/AboutProject';
+import Scene3D from '@/components/Scene3D';
+import Tilt3D from '@/components/Tilt3D';
 import type { GeocodedLocation, WeatherData, AirQualityData } from '@/types/weather';
 
 type State = 'idle' | 'loading' | 'success' | 'error';
@@ -95,6 +97,7 @@ export default function HomePage() {
 
   return (
     <div className="relative min-h-screen grain ambient-glow">
+      <Scene3D />
       {/* Header */}
       <header className="sticky top-0 z-40">
         <div className="bg-black/80 backdrop-blur-md border-b hairline">
@@ -187,12 +190,12 @@ export default function HomePage() {
               </div>
             )}
 
-            <CurrentWeather data={weather} />
-            <DayBrief data={weather} />
-            {weather.hourly?.length > 0 && <HourlyForecast hourly={weather.hourly} timezone={weather.timezone} />}
-            {weather.daily[0] && <PackingAdvisory today={weather.daily[0]} />}
-            <ForecastGrid daily={weather.daily} timezone={weather.timezone} />
-            {weather.daily[0] && <SunArc today={weather.daily[0]} timezone={weather.timezone} />}
+            <Tilt3D><CurrentWeather data={weather} /></Tilt3D>
+            <Tilt3D><DayBrief data={weather} /></Tilt3D>
+            {weather.hourly?.length > 0 && <Tilt3D><HourlyForecast hourly={weather.hourly} timezone={weather.timezone} /></Tilt3D>}
+            {weather.daily[0] && <Tilt3D><PackingAdvisory today={weather.daily[0]} /></Tilt3D>}
+            <Tilt3D><ForecastGrid daily={weather.daily} timezone={weather.timezone} /></Tilt3D>
+            {weather.daily[0] && <Tilt3D><SunArc today={weather.daily[0]} timezone={weather.timezone} /></Tilt3D>}
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <WeatherMap
@@ -233,7 +236,7 @@ export default function HomePage() {
           </div>
         )}
 
-        <AboutPMA />
+        <AboutProject />
       </main>
 
       {showSaveModal && selectedLocation && (

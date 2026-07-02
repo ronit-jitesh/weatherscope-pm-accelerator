@@ -17,31 +17,31 @@ export function getPackingAdvisory(params: {
     items.push({
       category: 'Clothing',
       items: ['Heavy winter coat', 'Thermal base layers', 'Insulated gloves', 'Warm hat & scarf', 'Wool socks', 'Insulated boots'],
-      reason: `Feels like ${Math.round(avgFeelsLike)}°C — extreme cold`,
+      reason: `Feels like ${Math.round(avgFeelsLike)}°C, extreme cold`,
     });
   } else if (avgFeelsLike <= 10) {
     items.push({
       category: 'Clothing',
       items: ['Warm coat', 'Sweater or fleece', 'Gloves', 'Hat', 'Warm socks'],
-      reason: `Feels like ${Math.round(avgFeelsLike)}°C — cold`,
+      reason: `Feels like ${Math.round(avgFeelsLike)}°C, cold`,
     });
   } else if (avgFeelsLike <= 18) {
     items.push({
       category: 'Clothing',
       items: ['Light jacket', 'Layered tops', 'Comfortable trousers'],
-      reason: `Feels like ${Math.round(avgFeelsLike)}°C — cool`,
+      reason: `Feels like ${Math.round(avgFeelsLike)}°C, cool`,
     });
   } else if (avgFeelsLike <= 27) {
     items.push({
       category: 'Clothing',
       items: ['Light clothing', 'T-shirts', 'Shorts or light trousers'],
-      reason: `Feels like ${Math.round(avgFeelsLike)}°C — comfortable`,
+      reason: `Feels like ${Math.round(avgFeelsLike)}°C, comfortable`,
     });
   } else {
     items.push({
       category: 'Clothing',
       items: ['Very light, breathable clothing', 'Sun hat', 'Sandals'],
-      reason: `Feels like ${Math.round(avgFeelsLike)}°C — hot`,
+      reason: `Feels like ${Math.round(avgFeelsLike)}°C, hot`,
     });
   }
 
@@ -50,19 +50,19 @@ export function getPackingAdvisory(params: {
     items.push({
       category: 'Sun Protection',
       items: ['SPF 50+ sunscreen (reapply every 2h)', 'Wide-brim sun hat', 'UV-blocking sunglasses', 'Long sleeves for midday'],
-      reason: `UV index ${uvIndexMax} — very high/extreme`,
+      reason: `UV index ${uvIndexMax}, very high/extreme`,
     });
   } else if (uvIndexMax >= 6) {
     items.push({
       category: 'Sun Protection',
       items: ['SPF 30+ sunscreen', 'Sunglasses', 'Hat'],
-      reason: `UV index ${uvIndexMax} — high`,
+      reason: `UV index ${uvIndexMax}, high`,
     });
   } else if (uvIndexMax >= 3) {
     items.push({
       category: 'Sun Protection',
       items: ['SPF 15+ sunscreen', 'Sunglasses'],
-      reason: `UV index ${uvIndexMax} — moderate`,
+      reason: `UV index ${uvIndexMax}, moderate`,
     });
   }
 
@@ -71,13 +71,13 @@ export function getPackingAdvisory(params: {
     items.push({
       category: 'Rain Gear',
       items: ['Waterproof rain jacket', 'Waterproof shoes or wellies', 'Compact umbrella'],
-      reason: `${precipitationProbabilityMax}% chance of rain — very likely`,
+      reason: `${precipitationProbabilityMax}% chance of rain, very likely`,
     });
   } else if (precipitationProbabilityMax >= 40) {
     items.push({
       category: 'Rain Gear',
       items: ['Compact umbrella', 'Water-resistant layer'],
-      reason: `${precipitationProbabilityMax}% chance of rain — possible`,
+      reason: `${precipitationProbabilityMax}% chance of rain, possible`,
     });
   }
 
@@ -95,13 +95,13 @@ export function getPackingAdvisory(params: {
     items.push({
       category: 'Wind Protection',
       items: ['Windproof jacket', 'Secure bag / avoid umbrellas', 'Hat with strap'],
-      reason: `Wind up to ${Math.round(windSpeedMax)} km/h — very windy`,
+      reason: `Wind up to ${Math.round(windSpeedMax)} km/h, very windy`,
     });
   } else if (windSpeedMax > 30) {
     items.push({
       category: 'Wind Protection',
       items: ['Windbreaker', 'Secure loose items'],
-      reason: `Wind up to ${Math.round(windSpeedMax)} km/h — breezy`,
+      reason: `Wind up to ${Math.round(windSpeedMax)} km/h, breezy`,
     });
   }
 

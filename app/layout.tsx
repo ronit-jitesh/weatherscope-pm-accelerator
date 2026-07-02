@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "WeatherScope · Make weather data work for you",
   description:
-    "Live conditions, hourly + 7-day forecast, air quality, and a smart day brief for anywhere on Earth. Built by Ronit Jitesh for the PM Accelerator AI Engineer assessment.",
+    "Live conditions, hourly and 7-day forecasts, air quality, city comparison, and a smart day brief for anywhere on Earth. Designed and built by Ronit Jitesh.",
   manifest: "/manifest.webmanifest",
   applicationName: "WeatherScope",
   appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "WeatherScope" },
